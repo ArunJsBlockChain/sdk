@@ -1,5 +1,5 @@
 import type { FlowEnv } from "@rarible/flow-sdk/build/types"
-import type { EthereumNetwork } from "@rarible/protocol-ethereum-sdk/build/types"
+import type { EthereumNetwork } from "@zodeak/ethereum-sdk/build/types"
 import type { TezosNetwork } from "@rarible/tezos-sdk"
 import type { SolanaCluster } from "@rarible/solana-sdk"
 import type { ImxEnv } from "@rarible/immutable-wallet"

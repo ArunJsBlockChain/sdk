@@ -1,7 +1,7 @@
-import type { RaribleSdk } from "@rarible/protocol-ethereum-sdk"
+import type { RaribleSdk } from "@zodeak/ethereum-sdk"
 import { Action } from "@rarible/action"
 import { BlockchainEthereumTransaction } from "@rarible/sdk-transaction"
-import type { EthereumNetwork } from "@rarible/protocol-ethereum-sdk/build/types"
+import type { EthereumNetwork } from "@zodeak/ethereum-sdk/build/types"
 import type { CancelOrderRequest, ICancel } from "../../types/order/cancel/domain"
 import { isEVMBlockchain } from "./common"
 

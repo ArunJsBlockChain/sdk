@@ -1,8 +1,8 @@
-import type { RaribleSdk } from "@rarible/protocol-ethereum-sdk"
+import type { RaribleSdk } from "@zodeak/ethereum-sdk"
 import { Action } from "@rarible/action"
 import { toBigNumber } from "@rarible/types"
 import { BlockchainEthereumTransaction } from "@rarible/sdk-transaction"
-import type { EthereumNetwork } from "@rarible/protocol-ethereum-sdk/build/types"
+import type { EthereumNetwork } from "@zodeak/ethereum-sdk/build/types"
 import type { BurnRequest, PrepareBurnRequest } from "../../types/nft/burn/domain"
 import { isEVMBlockchain, toEthereumParts } from "./common"
 

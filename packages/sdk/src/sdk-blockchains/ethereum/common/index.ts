@@ -13,7 +13,7 @@ import type { AssetType, CollectionId, Creator, ItemId, OrderId } from "@rarible
 import { Blockchain } from "@rarible/api-client"
 import type { UnionPart } from "packages/sdk/src/types/order/common"
 import type { ContractAddress } from "@rarible/types/build/contract-address"
-import type { EthereumNetwork } from "@rarible/protocol-ethereum-sdk/build/types"
+import type { EthereumNetwork } from "@zodeak/ethereum-sdk/build/types"
 import { toBn } from "@rarible/utils/build/bn"
 import type { AssetType as EthereumAssetType, Part } from "@rarible/ethereum-api-client"
 import type { Order } from "@rarible/ethereum-api-client/build/models"

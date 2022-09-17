@@ -2,7 +2,7 @@ import BigNumber from "bignumber.js"
 import type { Address } from "@rarible/types"
 import { toAddress } from "@rarible/types"
 import type { EthereumWallet } from "@rarible/sdk-wallet"
-import type { RaribleSdk } from "@rarible/protocol-ethereum-sdk"
+import type { RaribleSdk } from "@zodeak/ethereum-sdk"
 
 export async function resetWethFunds(wallet: EthereumWallet, sdk: RaribleSdk, contract: Address) {
 	const wethAsset = { assetClass: "ERC20" as const, contract }

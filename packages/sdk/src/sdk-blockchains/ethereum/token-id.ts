@@ -1,4 +1,4 @@
-import type { RaribleSdk } from "@rarible/protocol-ethereum-sdk"
+import type { RaribleSdk } from "@zodeak/ethereum-sdk"
 import type { GenerateTokenIdRequest, TokenId } from "../../types/nft/generate-token-id"
 import { convertToEthereumAddress } from "./common"
 

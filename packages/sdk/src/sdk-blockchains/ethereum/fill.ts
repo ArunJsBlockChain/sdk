@@ -1,4 +1,4 @@
-import type { RaribleSdk } from "@rarible/protocol-ethereum-sdk"
+import type { RaribleSdk } from "@zodeak/ethereum-sdk"
 import type { BigNumber } from "@rarible/types"
 import { toAddress, toBigNumber, toWord } from "@rarible/types"
 import type {
@@ -7,15 +7,15 @@ import type {
 	FillOrderRequest,
 	RaribleV2OrderFillRequestV3Buy,
 	RaribleV2OrderFillRequestV3Sell,
-} from "@rarible/protocol-ethereum-sdk/build/order/fill-order/types"
-import type { SimpleOrder } from "@rarible/protocol-ethereum-sdk/build/order/types"
+} from "@zodeak/ethereum-sdk/build/order/fill-order/types"
+import type { SimpleOrder } from "@zodeak/ethereum-sdk/build/order/types"
 import { BigNumber as BigNumberClass } from "@rarible/utils/build/bn"
 import { BlockchainEthereumTransaction } from "@rarible/sdk-transaction"
-import { isNft } from "@rarible/protocol-ethereum-sdk/build/order/is-nft"
-import { getOwnershipId } from "@rarible/protocol-ethereum-sdk/build/common/get-ownership-id"
+import { isNft } from "@zodeak/ethereum-sdk/build/order/is-nft"
+import { getOwnershipId } from "@zodeak/ethereum-sdk/build/common/get-ownership-id"
 import type { EthereumWallet } from "@rarible/sdk-wallet"
 import type { Maybe } from "@rarible/types/build/maybe"
-import type { EthereumNetwork } from "@rarible/protocol-ethereum-sdk/build/types"
+import type { EthereumNetwork } from "@zodeak/ethereum-sdk/build/types"
 import type { OrderId } from "@rarible/api-client"
 import type { Order } from "@rarible/ethereum-api-client/build/models/Order"
 import type {
