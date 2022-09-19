@@ -1,5 +1,5 @@
 import { toAddress, toWord } from "@rarible/types"
-import type { EthereumNetwork } from "@rarible/protocol-ethereum-sdk/build/types"
+import type { EthereumNetwork } from "@zodeak/ethereum-sdk/build/types"
 import { BlockchainEthereumTransaction } from "./"
 
 const networks: EthereumNetwork[] = ["mainnet", "mumbai", "testnet"]

@@ -1,6 +1,6 @@
 import { Blockchain } from "@rarible/api-client"
 import type { EthereumTransaction } from "@rarible/ethereum-provider"
-import type { EthereumNetwork } from "@rarible/protocol-ethereum-sdk/build/types"
+import type { EthereumNetwork } from "@zodeak/ethereum-sdk/build/types"
 import type { IBlockchainTransaction } from "../domain"
 
 export class BlockchainEthereumTransaction<TransactionResult = undefined> implements

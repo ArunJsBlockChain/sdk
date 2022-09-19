@@ -1,8 +1,8 @@
 import type { Request, Response } from "express"
 import fetch from "node-fetch"
 import { Web3Ethereum } from "@rarible/web3-ethereum"
-import { createRaribleSdk } from "@rarible/protocol-ethereum-sdk"
-import type { EthereumNetwork } from "@rarible/protocol-ethereum-sdk/build/types"
+import { createRaribleSdk } from "@zodeak/ethereum-sdk"
+import type { EthereumNetwork } from "@zodeak/ethereum-sdk/build/types"
 import { toAddress } from "@rarible/types/build/address"
 import { getAddressParts, web3Provider } from "../utils"
 

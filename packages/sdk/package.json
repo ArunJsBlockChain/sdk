@@ -1,7 +1,7 @@
 {
-  "name": "@rarible/sdk",
-  "version": "0.9.31",
-  "homepage": "",
+  "name": "@zodeak/sdk",
+  "version": "0.0.9",
+  "homepage": "https://github.com/ArunJsBlockChain/sdk#readme",
   "license": "ISC",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -27,7 +27,7 @@
     "@rarible/immutable-sdk": "^0.9.30",
     "@rarible/immutable-wallet": "^0.9.21",
     "@rarible/logger": "^0.9.9",
-    "@rarible/protocol-ethereum-sdk": "~0.12.95",
+    "@zodeak/ethereum-sdk": "0.0.7",
     "@rarible/sdk-transaction": "^0.9.31",
     "@rarible/sdk-wallet": "^0.9.31",
     "@rarible/solana-sdk": "^0.9.12",
@@ -95,5 +95,9 @@
   "author": "Arunkumar js",
   "bugs": {
     "url": "https://github.com/ArunJsBlockChain/sdk/issues"
-  }
+  },
+  "keywords": [
+    "Union",
+    "sdk"
+  ]
 }
