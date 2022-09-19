@@ -1,6 +1,6 @@
 {
   "name": "@rarible/sdk-wallet",
-  "version": "0.9.30",
+  "version": "0.9.31",
   "homepage": "",
   "license": "ISC",
   "main": "build/index.js",
@@ -25,7 +25,7 @@
     "@rarible/fcl-types": "~0.5.0",
     "@rarible/flow-sdk": "~0.5.48-alpha.5",
     "@rarible/solana-wallet": "^0.9.12",
-    "@rarible/tezos-sdk": "~0.1.34",
+    "@rarible/tezos-sdk": "~0.1.39",
     "@rarible/types": "~0.9.6"
   },
   "devDependencies": {
@@ -41,7 +41,7 @@
     "@onflow/fcl": "~0.0.77",
     "@rarible/ethereum-sdk-test-common": "~0.12.92",
     "@rarible/fcl-types": "~0.5.0",
-    "@rarible/web3-ethereum": "~0.12.92",
+    "@rarible/web3-ethereum": "~0.12.94",
     "@types/jest": "^27.0.2",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
