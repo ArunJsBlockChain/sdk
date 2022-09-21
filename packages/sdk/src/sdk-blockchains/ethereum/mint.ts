@@ -23,6 +23,7 @@ import type { IApisSdk } from "../../domain"
 import type { CommonTokenMetadataResponse, PreprocessMetaRequest } from "../../types/nft/mint/preprocess-meta"
 import type { EVMBlockchain } from "./common"
 import { convertEthereumItemId, convertToEthereumAddress, getEVMBlockchain } from "./common"
+import { getNftCollectionById } from "../../zodeak-api-client"
 
 export class EthereumMint {
 	private readonly blockchain: EVMBlockchain
@@ -175,7 +176,10 @@ export async function getCollection(
 	if ("collection" in req) {
 		return req.collection
 	}
-	return api.getCollectionById({ collection: req.collectionId })
+	const collectionId = req.collectionId.split(":")[1]
+	const collectionResponse = await getNftCollectionById(collectionId)
+	return collectionResponse.data[0]
+	// return api.getCollectionById({ collection: req.collectionId })
 }
 
 function toNftCollection(collection: Collection): CommonNftCollection {
