@@ -23,6 +23,7 @@ import { Middlewarer } from "./common/middleware/middleware"
 import { getInternalLoggerMiddleware } from "./common/logger/logger-middleware"
 import { createSolanaSdk } from "./sdk-blockchains/solana"
 import { createImmutablexSdk } from "./sdk-blockchains/immutablex"
+import { getItemById } from "./zodeak-api-client"
 
 export function createRaribleSdk(
 	wallet: Maybe<BlockchainWallet>,
@@ -139,7 +140,9 @@ function filterWallet<T extends WalletType>(
 
 function createSell(sell: ISellInternal, apis: IApisSdk): ISell {
 	return async ({ itemId }) => {
-		const item = await apis.item.getItemById({ itemId })
+		const nftIemId = itemId.split(":")
+		const responseData = await getItemById(`${nftIemId[1]}:${nftIemId[2]}`)
+		const item = responseData.data
 		const response = await sell({ blockchain: item.blockchain })
 		return {
 			...response,

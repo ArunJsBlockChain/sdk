@@ -16,6 +16,7 @@ import {
 	validateOrderDataV3Request,
 } from "./common"
 import type { IEthereumSdkConfig } from "./domain"
+import { getNftItemById } from "../../zodeak-api-client"
 
 export class EthereumSell {
 	private readonly blockchain: EVMBlockchain
@@ -37,12 +38,13 @@ export class EthereumSell {
 			return this.sellDataV2()
 		}
 	}
-
+	
 	private async sellDataV2(): Promise<PrepareSellInternalResponse> {
 		const sellAction = this.sdk.order.sell
-			.before(async (sellFormRequest: OrderCommon.OrderInternalRequest) => {
-				const { itemId } = getEthereumItemId(sellFormRequest.itemId)
-				const item = await this.sdk.apis.nftItem.getNftItemById({ itemId })
+		.before(async (sellFormRequest: OrderCommon.OrderInternalRequest) => {
+			const { itemId } = getEthereumItemId(sellFormRequest.itemId)
+				const responseData = await getNftItemById(itemId)
+				const item = responseData.data
 				const expirationDate = sellFormRequest.expirationDate instanceof Date
 					? Math.floor(sellFormRequest.expirationDate.getTime() / 1000)
 					: undefined
