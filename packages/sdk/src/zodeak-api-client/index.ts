@@ -20,3 +20,17 @@ export const getItemById = async (itemId:string) => {
         payload:{id:itemId}
     })
 }
+
+export const getOrderByHash = async (orderHash:string) => {
+    return await Post({
+        url:`order/getOrderByHash`,
+        payload:{hash:orderHash}
+    })
+}
+
+export const getNftOwnershipById = async (ownerShipId:string) => {
+    return await Post({
+        url:`items/getNftOwnershipId`,
+        payload:{ownershipId:ownerShipId}
+    })
+}

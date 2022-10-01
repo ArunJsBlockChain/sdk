@@ -36,6 +36,7 @@ import {
 	validateOrderDataV3Request,
 } from "./common"
 import type { IEthereumSdkConfig } from "./domain"
+import { getNftCollectionById, getNftOwnershipById, getOrderByHash } from "../../zodeak-api-client"
 
 export type SupportFlagsResponse = {
 	originFeeSupport: OriginFeeSupport,
@@ -256,7 +257,8 @@ export class EthereumFill {
 				toAddress(address),
 			)
 
-			const ownership = await this.sdk.apis.nftOwnership.getNftOwnershipById({ ownershipId })
+			const ownershipResponse = await getNftOwnershipById(ownershipId)
+			const ownership = ownershipResponse.data
 
 			return toBigNumber(BigNumberClass.min(ownership.value, order.take.value).toFixed())
 		}
@@ -275,11 +277,9 @@ export class EthereumFill {
 		} else {
 			throw new Error("Nft has not been found")
 		}
-		const collection = await this.sdk.apis.nftCollection.getNftCollectionById({
-			collection: contract,
-		})
+		const collection = await getNftCollectionById(contract)
 
-		return collection.type === "ERC1155"
+		return collection.data[0].type === "ERC1155"
 	}
 
 	getOrderHashFromRequest(request: PrepareFillRequest): string {
@@ -297,8 +297,9 @@ export class EthereumFill {
 
 	private async commonFill(action: FillOrderAction, request: PrepareFillRequest): Promise<PrepareFillResponse> {
 		const orderHash = this.getOrderHashFromRequest(request)
-		const order = await this.sdk.apis.order.getOrderByHash({ hash: orderHash })
-
+		const orderResponse = await getOrderByHash(orderHash)
+		const order = orderResponse.data
+		
 		const submit = action
 			.before((fillRequest: FillRequest) => {
 				if (fillRequest.unwrap) {
@@ -405,7 +406,8 @@ export class EthereumFill {
 
 		const prepared = await Promise.all(prepareRequest.map(async (req) => {
 			const orderHash = this.getOrderHashFromRequest(req)
-			const ethOrder = await this.sdk.apis.order.getOrderByHash({ hash: orderHash })
+			const orderResponse = await getOrderByHash(orderHash)
+			const ethOrder = orderResponse.data
 			const orderId = getOrderId(req)
 			orders[orderId] = ethOrder
 
