@@ -16,7 +16,7 @@ import {
 	validateOrderDataV3Request,
 } from "./common"
 import type { IEthereumSdkConfig } from "./domain"
-import { getNftItemById } from "../../zodeak-api-client"
+import { getNftItemById, getOrderByHash } from "../../zodeak-api-client"
 
 export class EthereumSell {
 	private readonly blockchain: EVMBlockchain
@@ -130,7 +130,8 @@ export class EthereumSell {
 			throw new Error("Not an ethereum order")
 		}
 
-		const order = await this.sdk.apis.order.getOrderByHash({ hash })
+		const response = await getOrderByHash(hash)
+		const order = response.data
 		if (order.type !== "RARIBLE_V2" && order.type !== "RARIBLE_V1") {
 			throw new Error(`Unable to update sell ${JSON.stringify(order)}`)
 		}
