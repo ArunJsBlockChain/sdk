@@ -46,6 +46,7 @@ import {
 } from "./common"
 import type { EthereumBalance } from "./balance"
 import type { IEthereumSdkConfig } from "./domain"
+import { getNftItemById, getOrderByHash, getNftCollectionById } from "../../zodeak-api-client"
 
 export class EthereumBid {
 	private readonly blockchain: EVMBlockchain
@@ -167,7 +168,8 @@ export class EthereumBid {
 
 		if ("itemId" in prepare) {
 			const { itemId } = getEthereumItemId(prepare.itemId)
-			item = await this.sdk.apis.nftItem.getNftItemById({ itemId })
+			const response = await getNftItemById(itemId)
+			item = response.data as NftItem
 			contractAddress = item.contract
 
 			takeAssetType = {
@@ -179,14 +181,13 @@ export class EthereumBid {
 			takeAssetType = {
 				assetClass: "COLLECTION",
 				contract: contractAddress,
-			}
+			}	
 		} else {
 			throw new Error("ItemId or CollectionId must be assigned")
 		}
 
-		const collection = await this.sdk.apis.nftCollection.getNftCollectionById({
-			collection: contractAddress,
-		})
+		const response = await getNftCollectionById(contractAddress)
+		const collection = response.data[0]
 
 		const bidAction = this.sdk.order.bid
 			.before(async (request: OrderCommon.OrderRequest) => {
@@ -420,7 +421,8 @@ export class EthereumBid {
 			throw new Error("Not an ethereum order")
 		}
 
-		const order = await this.sdk.apis.order.getOrderByHash({ hash })
+		const response = await getOrderByHash(hash)
+		const order = response.data
 		if (order.type !== "RARIBLE_V2" && order.type !== "RARIBLE_V1") {
 			throw new Error(`Unable to update bid ${JSON.stringify(order)}`)
 		}
