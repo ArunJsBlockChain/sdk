@@ -5,6 +5,7 @@ import { BlockchainEthereumTransaction } from "@rarible/sdk-transaction"
 import type { EthereumNetwork } from "@zodeak/ethereum-sdk/build/types"
 import type { BurnRequest, PrepareBurnRequest } from "../../types/nft/burn/domain"
 import { isEVMBlockchain, toEthereumParts } from "./common"
+import { getNftCollectionById, getNftItemById } from "../../zodeak-api-client"
 
 export class EthereumBurn {
 	constructor(
@@ -24,12 +25,11 @@ export class EthereumBurn {
 			throw new Error(`Not an ethereum item: ${prepare.itemId}`)
 		}
 
-		const item = await this.sdk.apis.nftItem.getNftItemById({
-			itemId: `${contract}:${tokenId}`,
-		})
-		const collection = await this.sdk.apis.nftCollection.getNftCollectionById({
-			collection: item.contract,
-		})
+		const response = await getNftItemById(`${contract}:${tokenId}`)
+		const item = response.data
+
+		const collectionResponse = await getNftCollectionById(item.contract)
+		const collection = collectionResponse.data[0]
 
 		return {
 			multiple: collection.type === "ERC1155",

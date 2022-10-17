@@ -5,6 +5,7 @@ import { BlockchainEthereumTransaction } from "@rarible/sdk-transaction"
 import type { EthereumNetwork } from "@zodeak/ethereum-sdk/build/types"
 import type { PrepareTransferRequest, TransferRequest } from "../../types/nft/transfer/domain"
 import { convertToEthereumAddress, isEVMBlockchain } from "./common"
+import { getNftCollectionById, getNftItemById } from "../../zodeak-api-client"
 
 export class EthereumTransfer {
 	constructor(
@@ -20,12 +21,11 @@ export class EthereumTransfer {
 			throw new Error(`Not an ethereum item: ${prepare.itemId}`)
 		}
 
-		const item = await this.sdk.apis.nftItem.getNftItemById({
-			itemId: `${contract}:${tokenId}`,
-		})
-		const collection = await this.sdk.apis.nftCollection.getNftCollectionById({
-			collection: item.contract,
-		})
+		const response = await getNftItemById(`${contract}:${tokenId}`)
+		const item = response.data
+
+		const collectionResponse = await getNftCollectionById(item.contract)
+		const collection = collectionResponse.data[0]
 
 		return {
 			multiple: collection.type === "ERC1155",
