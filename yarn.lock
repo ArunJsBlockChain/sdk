@@ -6751,10 +6751,10 @@
     exponential-backoff "^3.1.0"
     merkletreejs "^0.2.31"
 
-"@zodeak/ethereum-sdk@0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@zodeak/ethereum-sdk/-/ethereum-sdk-0.3.1.tgz#f1b2be9a18866ac024ba19a4fb09f1e326f59852"
-  integrity sha512-cmc2g9hWPwIojnUL8xkAJ9lwDUJsTfZ61H4OLHEyugiOAmFXhlQCU7I8JbSoNgDd44NK7E5LRQhJXQR7FZBLzg==
+"@zodeak/ethereum-sdk@0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@zodeak/ethereum-sdk/-/ethereum-sdk-0.3.2.tgz#32b3787c0394a8f66c6e33f3df62bd24e81095e6"
+  integrity sha512-t1IcO8/qOipAeYVZZICAo6ptY87muiliPmQYg6EjWsGDeFtjp/MBeXskTYg8h9+V6bQ0xCw7U0mzWwWjQQCGAQ==
   dependencies:
     "@rarible/action" "~0.5.0"
     "@rarible/ethereum-api-client" "^0.1.23-beta7"
