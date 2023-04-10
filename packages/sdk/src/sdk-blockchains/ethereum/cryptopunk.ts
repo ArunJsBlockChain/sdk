@@ -1,6 +1,6 @@
 import type { RaribleSdk } from "@zodeak/ethereum-sdk"
 import { Action } from "@rarible/action"
-import { BlockchainEthereumTransaction } from "@rarible/sdk-transaction"
+import { BlockchainEthereumTransaction } from "@zodeak/sdk-transaction"
 import type { EthereumNetwork } from "@zodeak/ethereum-sdk/build/types"
 import type {
 	CryptopunkUnwrapRequest,

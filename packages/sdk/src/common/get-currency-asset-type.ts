@@ -1,7 +1,6 @@
 import { toBigNumber, toContractAddress, toCurrencyId, toItemId, ZERO_ADDRESS } from "@rarible/types"
 import type * as ApiClient from "@rarible/api-client"
-import { Blockchain } from "@rarible/api-client"
-import { isEVMBlockchain } from "../sdk-blockchains/ethereum/common"
+import { ExtendBlockchain, isEVMBlockchain } from "../sdk-blockchains/ethereum/common"
 import type { RequestCurrency, RequestCurrencyAssetType } from "./domain"
 
 export function getCurrencyAssetType(currency: RequestCurrency): RequestCurrencyAssetType {
@@ -23,7 +22,7 @@ export function isAssetType(x: RequestCurrency): x is RequestCurrencyAssetType {
 
 export function convertCurrencyIdToAssetType(id: ApiClient.CurrencyId): RequestCurrencyAssetType {
 	const { blockchain, contract, tokenId } = getDataFromCurrencyId(id)
-	if (isEVMBlockchain(blockchain) || blockchain === Blockchain.IMMUTABLEX) {
+	if (isEVMBlockchain(blockchain) || blockchain === ExtendBlockchain.IMMUTABLEX) {
 		if (contract === ZERO_ADDRESS) {
 			return {
 				"@type": "ETH",
@@ -35,13 +34,13 @@ export function convertCurrencyIdToAssetType(id: ApiClient.CurrencyId): RequestC
 			contract: toContractAddress(`${blockchain}:${contract}`),
 		}
 	}
-	if (blockchain === Blockchain.FLOW) {
+	if (blockchain === ExtendBlockchain.FLOW) {
 		return {
 			"@type": "FLOW_FT",
 			contract: toContractAddress(id),
 		}
 	}
-	if (blockchain === Blockchain.TEZOS) {
+	if (blockchain === ExtendBlockchain.TEZOS) {
 		if (id === XTZ) {
 			return {
 				"@type": "XTZ",
@@ -53,7 +52,7 @@ export function convertCurrencyIdToAssetType(id: ApiClient.CurrencyId): RequestC
 			tokenId: tokenId ? toBigNumber(tokenId) : undefined,
 		}
 	}
-	if (blockchain === Blockchain.SOLANA) {
+	if (blockchain === ExtendBlockchain.SOLANA) {
 		if (contract === ZERO_ADDRESS) {
 			return {
 				"@type": "SOLANA_SOL",
@@ -69,11 +68,11 @@ export function convertCurrencyIdToAssetType(id: ApiClient.CurrencyId): RequestC
 
 export function getDataFromCurrencyId(id: ApiClient.CurrencyId) {
 	const [blockchain, contract, tokenId] = id.split(":")
-	if (!(blockchain in Blockchain)) {
+	if (!(blockchain in ExtendBlockchain)) {
 		throw new Error(`Unsupported blockchain: ${id}`)
 	}
 	return {
-		blockchain: blockchain as Blockchain,
+		blockchain: blockchain as ExtendBlockchain,
 		contract,
 		tokenId,
 	}

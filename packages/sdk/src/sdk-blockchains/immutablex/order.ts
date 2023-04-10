@@ -1,5 +1,5 @@
 import type { RaribleImxSdk } from "@rarible/immutable-sdk/src/domain"
-import { BlockchainImmutableXTransaction } from "@rarible/sdk-transaction"
+import { BlockchainImmutableXTransaction } from "@zodeak/sdk-transaction"
 import { toAddress, toBigNumber, toOrderId } from "@rarible/types"
 import { OrderStatus } from "@rarible/api-client"
 import { Action } from "@rarible/action"

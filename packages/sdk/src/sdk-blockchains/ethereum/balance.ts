@@ -1,11 +1,10 @@
 import type { RaribleSdk } from "@zodeak/ethereum-sdk"
 import type { UnionAddress } from "@rarible/types"
 import type { BigNumberValue } from "@rarible/utils"
-import type { IBlockchainTransaction } from "@rarible/sdk-transaction"
-import { BlockchainEthereumTransaction } from "@rarible/sdk-transaction"
+import { ExtendBlockchain, IBlockchainTransaction } from "@zodeak/sdk-transaction"
+import { BlockchainEthereumTransaction } from "@zodeak/sdk-transaction"
 import type { EthereumNetwork } from "@zodeak/ethereum-sdk/build/types"
 import type { AssetType as EthereumAssetType } from "@rarible/ethereum-api-client"
-import { Blockchain } from "@rarible/api-client"
 import { Action } from "@rarible/action"
 import { toContractAddress } from "@rarible/types"
 import type { ConvertRequest } from "../../types/balances"
@@ -80,7 +79,7 @@ export class EthereumBalance {
 			id: "send-tx" as const,
 			run: async (request: DepositBiddingBalanceRequest) => {
 				return this.convert({
-					blockchain: Blockchain.ETHEREUM,
+					blockchain: ExtendBlockchain.ETHEREUM,
 					isWrap: true,
 					value: request.amount,
 				})
@@ -92,7 +91,7 @@ export class EthereumBalance {
 			id: "send-tx" as const,
 			run: async (request: WithdrawBiddingBalanceRequest) => {
 				return this.convert({
-					blockchain: Blockchain.ETHEREUM,
+					blockchain: ExtendBlockchain.ETHEREUM,
 					isWrap: false,
 					value: request.amount,
 				})

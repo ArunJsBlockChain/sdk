@@ -1,7 +1,6 @@
 import type { ContractAddress } from "@rarible/types"
 import type { Maybe } from "@rarible/types/build/maybe"
 import type { CollectionId } from "@rarible/api-client"
-import { Blockchain } from "@rarible/api-client"
 import { WalletType } from "@rarible/sdk-wallet"
 import type { BlockchainWallet, WalletByBlockchain } from "@rarible/sdk-wallet"
 import type { IApisSdk, IRaribleInternalSdk, IRaribleSdk, IRaribleSdkConfig, ISdkContext } from "./domain"
@@ -24,6 +23,7 @@ import { getInternalLoggerMiddleware } from "./common/logger/logger-middleware"
 import { createSolanaSdk } from "./sdk-blockchains/solana"
 import { createImmutablexSdk } from "./sdk-blockchains/immutablex"
 import { getItemById } from "./zodeak-api-client"
+import { ExtendBlockchain } from "./sdk-blockchains/ethereum/common"
 
 export function createRaribleSdk(
 	wallet: Maybe<BlockchainWallet>,
@@ -42,7 +42,7 @@ export function createRaribleSdk(
 		createEthereumSdk(
 			filterWallet(wallet, WalletType.ETHEREUM),
 			apis,
-			Blockchain.ETHEREUM,
+			ExtendBlockchain.ETHEREUM,
 			blockchainConfig.ethereumEnv,
 			ethConfig
 		),
@@ -61,7 +61,7 @@ export function createRaribleSdk(
 		createEthereumSdk(
 			filterWallet(wallet, WalletType.ETHEREUM),
 			apis,
-			Blockchain.POLYGON,
+			ExtendBlockchain.POLYGON,
 			blockchainConfig.polygonNetwork,
 			ethConfig
 		),
@@ -75,7 +75,14 @@ export function createRaribleSdk(
 			filterWallet(wallet, WalletType.IMMUTABLEX),
 			apis,
 			blockchainConfig.immutablexNetwork
-		)
+		),		
+		createEthereumSdk(
+			filterWallet(wallet, WalletType.ETHEREUM),
+			apis,
+			ExtendBlockchain.BINANCE,
+			blockchainConfig.binanceEnv,
+			ethConfig
+		),
 	)
 
 	setupMiddleware(apis, instance, { wallet, env, config })
@@ -202,12 +209,12 @@ export function getCollectionId(req: HasCollectionId | HasCollection): Collectio
 	return req.collectionId
 }
 
-function getBlockchainCollectionId(contract: ContractAddress | CollectionId): Blockchain {
+function getBlockchainCollectionId(contract: ContractAddress | CollectionId): ExtendBlockchain {
 	const [blockchain] = contract.split(":")
-	if (!(blockchain in Blockchain)) {
+	if (!(blockchain in ExtendBlockchain)) {
 		throw new Error(`Unrecognized blockchain in contract ${contract}`)
 	}
-	return blockchain as Blockchain
+	return blockchain as ExtendBlockchain
 }
 
 type MiddleMintType = {

@@ -1,4 +1,4 @@
-import type { Blockchain } from "@rarible/api-client"
+import { ExtendBlockchain } from "../../../sdk-blockchains/ethereum/common"
 import type {
 	PrepareOrderRequest,
 	PrepareOrderUpdateRequest,
@@ -19,5 +19,5 @@ export type PrepareSellInternalRequest = {
 	/**
    * Blockchain of request
    */
-	blockchain: Blockchain
+	blockchain: ExtendBlockchain
 }

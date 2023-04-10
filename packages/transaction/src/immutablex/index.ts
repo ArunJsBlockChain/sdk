@@ -1,9 +1,8 @@
 import { Blockchain } from "@rarible/api-client"
-import type { IBlockchainTransaction } from "../domain"
-
+import { ExtendBlockchain, IBlockchainTransaction } from "../domain"
 
 export class BlockchainImmutableXTransaction implements IBlockchainTransaction {
-	blockchain: Blockchain = Blockchain.IMMUTABLEX
+	blockchain: ExtendBlockchain = ExtendBlockchain.IMMUTABLEX
 
 	constructor(public transaction: number | undefined) {
 	}

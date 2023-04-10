@@ -1,9 +1,9 @@
 import type { ItemId, Order, OrderId } from "@rarible/api-client"
 import type { BigNumber } from "@rarible/types/build/big-number"
-import type { Blockchain } from "@rarible/api-client"
-import type { IBlockchainTransaction } from "@rarible/sdk-transaction"
+import type { IBlockchainTransaction } from "@zodeak/sdk-transaction"
 import type { AbstractPrepareResponse } from "../../../common/domain"
 import type { UnionPart } from "../common"
+import { ExtendBlockchain } from "../../../sdk-blockchains/ethereum/common"
 
 export type PrepareFillRequest = {
 	/**
@@ -121,7 +121,7 @@ type BatchSinglePrepared = { orderId: OrderId } & PreparedFillInfo
 export interface PrepareBatchBuyResponse extends AbstractPrepareResponse<
 FillActionTypes,
 BatchFillRequest,
-IBlockchainTransaction<Blockchain, IBatchBuyTransactionResult>
+IBlockchainTransaction<ExtendBlockchain, IBatchBuyTransactionResult>
 > {
 	prepared: BatchSinglePrepared[]
 }

@@ -21,6 +21,7 @@ import type {
 	UploadedFolder,
 	UploadMetaResponse,
 } from "./domain"
+import { ExtendBlockchain } from "../../ethereum/common"
 
 const FILE = "file"
 const FOLDER_PREFIX = "/folder/"
@@ -28,7 +29,7 @@ const IPFS_GATEWAY_URL = "https://ipfs.rarible.com/ipfs"
 
 export class MetaUploader {
 	constructor(
-		readonly blockchain: Blockchain,
+		readonly blockchain: ExtendBlockchain,
 		readonly preprocessMeta: IPreprocessMeta
 	) {
 		this.preprocessMeta = preprocessMeta
@@ -50,7 +51,7 @@ export class MetaUploader {
 			animation: properties.animationUrl,
 		})
 		const blockchain = accountAddress.split(":")[0]
-		if (!(blockchain in Blockchain)) {
+		if (!(blockchain in ExtendBlockchain)) {
 			throw new Error(`Value: "${blockchain}" is not a supported blockchain type`)
 		}
 

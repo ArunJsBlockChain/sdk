@@ -1,6 +1,5 @@
 import type { TezosWallet } from "@rarible/sdk-wallet"
 import type { Maybe } from "@rarible/types/build/maybe"
-import { Blockchain } from "@rarible/api-client"
 import type { IApisSdk, IRaribleInternalSdk } from "../../domain"
 import { Middlewarer } from "../../common/middleware/middleware"
 import { nonImplementedAction, notImplemented } from "../../common/not-implemented"
@@ -17,6 +16,7 @@ import { TezosCancel } from "./cancel"
 import { TezosBalance } from "./balance"
 import { TezosCreateCollection } from "./create-collection"
 import { TezosCanTransfer } from "./restriction"
+import { ExtendBlockchain } from "../ethereum/common"
 
 export function createTezosSdk(
 	wallet: Maybe<TezosWallet>,
@@ -32,7 +32,7 @@ export function createTezosSdk(
 	const createCollectionService = new TezosCreateCollection(maybeProvider, network)
 
 	const preprocessMeta = Middlewarer.skipMiddleware(mintService.preprocessMeta)
-	const metaUploader = new MetaUploader(Blockchain.TEZOS, preprocessMeta)
+	const metaUploader = new MetaUploader(ExtendBlockchain.TEZOS, preprocessMeta)
 
 	return {
 		nft: {

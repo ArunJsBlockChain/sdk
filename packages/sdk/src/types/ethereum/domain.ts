@@ -1,4 +1,4 @@
-import type { IBlockchainTransaction } from "@rarible/sdk-transaction"
+import type { IBlockchainTransaction } from "@zodeak/sdk-transaction"
 import type { Action } from "@rarible/action"
 
 export type CryptopunkWrapRequest = {

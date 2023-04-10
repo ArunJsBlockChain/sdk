@@ -1,9 +1,10 @@
 import type * as ApiClient from "@rarible/api-client"
 import type { Action } from "@rarible/action"
+import { EthEthereumAssetType, ExtendBlockchain } from "../sdk-blockchains/ethereum/common"
 
 // @todo draft. probably will be changed in future
 export type CurrencyType = {
-	blockchain: ApiClient.Blockchain
+	blockchain: ExtendBlockchain
 	type: CurrencySubType
 }
 
@@ -17,7 +18,7 @@ export type RequestCurrency = ApiClient.CurrencyId | RequestCurrencyAssetType
 
 export type RequestCurrencyAssetType =
 	| ApiClient.EthErc20AssetType
-	| ApiClient.EthEthereumAssetType
+	| EthEthereumAssetType
 	| ApiClient.FlowAssetTypeFt
 	| ApiClient.TezosXTZAssetType
 	| ApiClient.TezosFTAssetType

@@ -1,7 +1,8 @@
 import type * as ApiClient from "@rarible/api-client"
-import type { IBlockchainTransaction } from "@rarible/sdk-transaction"
+import type { IBlockchainTransaction } from "@zodeak/sdk-transaction"
 import type { ContractAddress, UnionAddress } from "@rarible/types"
 import type { Action } from "@rarible/action"
+import { ExtendBlockchain } from "../../../sdk-blockchains/ethereum/common"
 
 export type CreateCollectionRequest<T extends CreateCollectionBlockchains = CreateCollectionBlockchains> = {
 	blockchain: T;
@@ -9,16 +10,17 @@ export type CreateCollectionRequest<T extends CreateCollectionBlockchains = Crea
 }
 
 export interface CreateCollectionAsset extends Record<CreateCollectionBlockchains, DeployTokenAsset> {
-	[ApiClient.Blockchain.ETHEREUM]: EthereumCreateCollectionAsset;
-	[ApiClient.Blockchain.TEZOS]: TezosCreateCollectionTokenAsset;
-	[ApiClient.Blockchain.SOLANA]: SolanaCreateCollectionTokenAsset;
+	[ExtendBlockchain.ETHEREUM]: EthereumCreateCollectionAsset;
+	[ExtendBlockchain.TEZOS]: TezosCreateCollectionTokenAsset;
+	[ExtendBlockchain.SOLANA]: SolanaCreateCollectionTokenAsset;
 }
 
 export type CreateCollectionBlockchains =
-	ApiClient.Blockchain.ETHEREUM |
-	ApiClient.Blockchain.POLYGON |
-	ApiClient.Blockchain.TEZOS |
-	ApiClient.Blockchain.SOLANA
+	ExtendBlockchain.ETHEREUM |
+	ExtendBlockchain.POLYGON |
+	ExtendBlockchain.TEZOS |
+	ExtendBlockchain.SOLANA |
+	ExtendBlockchain.BINANCE
 
 export type DeployTokenAsset =
 	EthereumCreateCollectionAsset |
@@ -62,7 +64,7 @@ export type CreatePrivateCollectionArguments =
 
 export type CreateCollectionResponse = {
 	tx: IBlockchainTransaction,
-	address: ContractAddress
+	address: string
 }
 
 export type ICreateCollection = Action<"send-tx", CreateCollectionRequest, CreateCollectionResponse>

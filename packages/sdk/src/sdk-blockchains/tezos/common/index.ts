@@ -9,7 +9,7 @@ import type {
 	TezosXTZAssetType,
 	UnionAddress,
 } from "@rarible/api-client"
-import { Blockchain, CollectionType } from "@rarible/api-client"
+import { CollectionType } from "@rarible/api-client"
 import type {
 	Asset as TezosLibAsset,
 	AssetType as TezosAssetType,
@@ -45,6 +45,7 @@ import type { UnionPart } from "../../../types/order/common"
 import type { CurrencyType } from "../../../common/domain"
 import type { RaribleSdkConfig } from "../../../config/domain"
 import { NetworkErrorCode } from "../../../common/apis"
+import { EthEthereumAssetType, ExtendBlockchain } from "../../ethereum/common"
 
 export interface ITezosAPI {
 	collection: NftCollectionControllerApi,
@@ -264,7 +265,7 @@ export function getTezosOrderId(orderId: OrderId): string {
 		throw new Error("OrderId has not been specified")
 	}
 	const [blockchain, id] = orderId.split(":")
-	if (blockchain !== Blockchain.TEZOS) {
+	if (blockchain !== ExtendBlockchain.TEZOS) {
 		throw new Error("Not an TEZOS order")
 	}
 	return id
@@ -272,7 +273,7 @@ export function getTezosOrderId(orderId: OrderId): string {
 
 export function getTezosItemData(itemId: ItemId) {
 	const [domain, contract, tokenId] = itemId.split(":")
-	if (domain !== Blockchain.TEZOS) {
+	if (domain !== ExtendBlockchain.TEZOS) {
 		throw new Error(`Not an tezos item: ${itemId}`)
 	}
 	return {
@@ -285,7 +286,7 @@ export function getTezosItemData(itemId: ItemId) {
 
 export function getTezosAddress(address: UnionAddress): string {
 	const [blockchain, tezosAddress] = address.split(":")
-	if (blockchain !== Blockchain.TEZOS) {
+	if (blockchain !== ExtendBlockchain.TEZOS) {
 		throw new Error(`Not an tezos item: ${address}`)
 	}
 	return tezosAddress
@@ -314,8 +315,8 @@ export async function getPayouts(provider: Provider, requestPayouts?: UnionPart[
 
 export function getSupportedCurrencies(): CurrencyType[] {
 	return [
-		{ blockchain: Blockchain.TEZOS, type: "NATIVE" },
-		{ blockchain: Blockchain.TEZOS, type: "TEZOS_FT" },
+		{ blockchain: ExtendBlockchain.TEZOS, type: "NATIVE" },
+		{ blockchain: ExtendBlockchain.TEZOS, type: "TEZOS_FT" },
 	]
 }
 
@@ -471,7 +472,7 @@ export function convertUnionParts(parts?: Array<Payout>): Array<Part> {
 
 export function convertFromContractAddress(contract: ContractAddress): string {
 	const [blockchain, tezosAddress] = contract.split(":")
-	if (blockchain !== Blockchain.TEZOS) {
+	if (blockchain !== ExtendBlockchain.TEZOS) {
 		throw new Error(`Not a tezos contract address: ${contract}`)
 	}
 	return tezosAddress
@@ -479,30 +480,30 @@ export function convertFromContractAddress(contract: ContractAddress): string {
 
 export function convertUnionAddress(address: UnionAddress): string {
 	const [blockchain, tezosAddress] = address.split(":")
-	if (blockchain !== Blockchain.TEZOS) {
+	if (blockchain !== ExtendBlockchain.TEZOS) {
 		throw new Error(`Not a tezos address: ${address}`)
 	}
 	return tezosAddress
 }
 
 export function convertTezosOrderId(hash: string): OrderId {
-	return toOrderId(`${Blockchain.TEZOS}:${hash}`)
+	return toOrderId(`${ExtendBlockchain.TEZOS}:${hash}`)
 }
 
 export function convertTezosItemId(itemId: string): ItemId {
-	return toItemId(`${Blockchain.TEZOS}:${itemId}`)
+	return toItemId(`${ExtendBlockchain.TEZOS}:${itemId}`)
 }
 
 export function convertTezosToContractAddress(address: string): ContractAddress {
-	return toContractAddress(`${Blockchain.TEZOS}:${address}`)
+	return toContractAddress(`${ExtendBlockchain.TEZOS}:${address}`)
 }
 
 export function convertTezosToCollectionAddress(address: string): CollectionId {
-	return toCollectionId(`${Blockchain.TEZOS}:${address}`)
+	return toCollectionId(`${ExtendBlockchain.TEZOS}:${address}`)
 }
 
 export function convertTezosToUnionAddress(address: string): UnionAddress {
-	return toUnionAddress(`${Blockchain.TEZOS}:${address}`)
+	return toUnionAddress(`${ExtendBlockchain.TEZOS}:${address}`)
 }
 
 export type CurrencyV2 = {
@@ -513,7 +514,7 @@ export type CurrencyV2 = {
 	asset_token_id: BigNumber | undefined
 }
 
-export async function getTezosAssetTypeV2(config: Config, type: AssetType): Promise<CurrencyV2> {
+export async function getTezosAssetTypeV2(config: Config, type: AssetType | EthEthereumAssetType): Promise<CurrencyV2> {
 	switch (type["@type"]) {
 		case "XTZ": {
 			return {

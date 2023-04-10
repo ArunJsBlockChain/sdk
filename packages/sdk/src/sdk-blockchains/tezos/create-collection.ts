@@ -2,12 +2,12 @@ import type { DeployResult, TezosNetwork, TezosProvider } from "@rarible/tezos-s
 import { Action } from "@rarible/action"
 // eslint-disable-next-line camelcase
 import { deploy_mt_private, deploy_mt_public, deploy_nft_private, deploy_nft_public } from "@rarible/tezos-sdk"
-import { BlockchainTezosTransaction } from "@rarible/sdk-transaction"
-import { Blockchain } from "@rarible/api-client"
+import { BlockchainTezosTransaction } from "@zodeak/sdk-transaction"
 import type { CreateCollectionRequest, ICreateCollection } from "../../types/nft/deploy/domain"
 import type { TezosCreateCollectionTokenAsset } from "../../types/nft/deploy/domain"
 import type { MaybeProvider } from "./common"
 import { checkChainId, convertTezosToContractAddress, getRequiredProvider } from "./common"
+import { ExtendBlockchain } from "../ethereum/common"
 
 export class TezosCreateCollection {
 	constructor(
@@ -44,7 +44,7 @@ export class TezosCreateCollection {
 	createCollection: ICreateCollection = Action.create({
 		id: "send-tx" as const,
 		run: async (request: CreateCollectionRequest) => {
-			if (request.blockchain !== Blockchain.TEZOS) {
+			if (request.blockchain !== ExtendBlockchain.TEZOS) {
 				throw new Error("Wrong blockchain")
 			}
 			await checkChainId(this.provider)

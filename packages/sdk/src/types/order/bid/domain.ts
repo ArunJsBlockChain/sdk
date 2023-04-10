@@ -1,5 +1,6 @@
 import type { AssetType, CollectionId, CurrencyId } from "@rarible/api-client"
 import type { BigNumberValue } from "@rarible/utils"
+import { EthEthereumAssetType } from "../../../sdk-blockchains/ethereum/common"
 import type {
 	PrepareOrderRequest,
 	PrepareOrderResponse,
@@ -26,7 +27,7 @@ export type GetConvertableValueRequest = {
 
 export type GetConvertableValueResult = {
 	type: "insufficient" | "convertable"
-	currency: AssetType
+	currency: AssetType | EthEthereumAssetType
 	value: BigNumberValue
 } | undefined
 

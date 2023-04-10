@@ -3,8 +3,7 @@ import type { Maybe } from "@rarible/types/build/maybe"
 import type { SolanaWallet } from "@rarible/sdk-wallet"
 import { Action } from "@rarible/action"
 import { toBigNumber, toItemId } from "@rarible/types"
-import { Blockchain } from "@rarible/api-client"
-import { BlockchainSolanaTransaction } from "@rarible/sdk-transaction"
+import { BlockchainSolanaTransaction } from "@zodeak/sdk-transaction"
 import type { PrepareMintResponse } from "../../types/nft/mint/domain"
 import { MintType } from "../../types/nft/mint/domain"
 import type { MintRequest } from "../../types/nft/mint/mint-request.type"
@@ -16,6 +15,7 @@ import type { CommonTokenContent, PreprocessMetaRequest } from "../../types/nft/
 import { extractPublicKey } from "./common/address-converters"
 import type { ISolanaSdkConfig } from "./domain"
 import type { ISolanaMetadataResponse } from "./domain"
+import { ExtendBlockchain } from "../ethereum/common"
 
 export class SolanaNft {
 	constructor(
@@ -152,7 +152,7 @@ export class SolanaNft {
 			throw new Error("Solana wallet not provided")
 		}
 
-		if (meta.blockchain !== Blockchain.SOLANA) {
+		if (meta.blockchain !== ExtendBlockchain.SOLANA) {
 			throw new Error("Wrong blockchain")
 		}
 

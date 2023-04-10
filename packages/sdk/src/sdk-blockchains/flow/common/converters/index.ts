@@ -1,7 +1,6 @@
 import type { FlowContractAddress, FlowCurrency, FlowItemId as FlowItemIdSdk } from "@rarible/flow-sdk"
 import { toFlowContractAddress } from "@rarible/flow-sdk"
 import type { CollectionId, ItemId, OrderId } from "@rarible/api-client"
-import { Blockchain } from "@rarible/api-client"
 import type { ContractAddress, FlowAddress, UnionAddress } from "@rarible/types"
 import {
 	toBigNumber,
@@ -17,6 +16,7 @@ import type { FlowFee } from "@rarible/flow-sdk/build/types"
 import { toBn } from "@rarible/utils/build/bn"
 import type { UnionPart } from "../../../../types/order/common"
 import type { ParsedFlowItemIdFromUnionItemId } from "../domain"
+import { ExtendBlockchain } from "../../../../sdk-blockchains/ethereum/common"
 
 const FLOW_COLLECTION_REGEXP = /^FLOW:A\.0*x*[0-9a-f]{16}\.[A-Za-z_]{3,}/
 
@@ -48,9 +48,9 @@ export function parseFlowItemIdFromUnionItemId(unionItemId: ItemId): ParsedFlowI
 		if (!itemId) {
 			throw new Error("Invalid item id, identifier is empty")
 		}
-		if (blockchain === Blockchain.FLOW) {
+		if (blockchain === ExtendBlockchain.FLOW) {
 			return {
-				blockchain: Blockchain.FLOW,
+				blockchain: ExtendBlockchain.FLOW,
 				contract: toFlowContractAddress(collectionId),
 				itemId,
 			}
@@ -115,7 +115,7 @@ export function convertToFlowAddress(
 	}
 
 	const [blockchain, address] = contractAddress.split(":")
-	if (blockchain !== Blockchain.FLOW) {
+	if (blockchain !== ExtendBlockchain.FLOW) {
 		throw new Error("Not an Flow address")
 	}
 	return toFlowAddress(address)
@@ -131,21 +131,21 @@ export function toFlowParts(parts: UnionPart[] | undefined): FlowFee[] {
 }
 
 export function convertFlowOrderId(orderId: number): OrderId {
-	return toOrderId(`${Blockchain.FLOW}:${orderId}`)
+	return toOrderId(`${ExtendBlockchain.FLOW}:${orderId}`)
 }
 
 export function convertFlowItemId(itemId: FlowItemIdSdk): ItemId {
-	return toItemId(`${Blockchain.FLOW}:${itemId}`)
+	return toItemId(`${ExtendBlockchain.FLOW}:${itemId}`)
 }
 
 export function convertFlowContractAddress(contractAddress: string): ContractAddress {
-	return toContractAddress(`${Blockchain.FLOW}:${contractAddress}`)
+	return toContractAddress(`${ExtendBlockchain.FLOW}:${contractAddress}`)
 }
 
 export function convertFlowCollectionId(contractAddress: string): CollectionId {
-	return toCollectionId(`${Blockchain.FLOW}:${contractAddress}`)
+	return toCollectionId(`${ExtendBlockchain.FLOW}:${contractAddress}`)
 }
 
 export function convertFlowUnionAddress(address: string): UnionAddress {
-	return toUnionAddress(`${Blockchain.FLOW}:${address}`)
+	return toUnionAddress(`${ExtendBlockchain.FLOW}:${address}`)
 }

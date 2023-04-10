@@ -1,5 +1,5 @@
 import { Action } from "@rarible/action"
-import { BlockchainFlowTransaction } from "@rarible/sdk-transaction"
+import { BlockchainFlowTransaction } from "@zodeak/sdk-transaction"
 import type { FlowSdk } from "@rarible/flow-sdk"
 import { toBigNumber } from "@rarible/types/build/big-number"
 import type { FlowNetwork } from "@rarible/flow-sdk/build/types"

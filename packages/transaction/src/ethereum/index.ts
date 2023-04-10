@@ -1,11 +1,11 @@
 import { Blockchain } from "@rarible/api-client"
 import type { EthereumTransaction } from "@rarible/ethereum-provider"
 import type { EthereumNetwork } from "@zodeak/ethereum-sdk/build/types"
-import type { IBlockchainTransaction } from "../domain"
+import { ExtendBlockchain, IBlockchainTransaction } from "../domain"
 
 export class BlockchainEthereumTransaction<TransactionResult = undefined> implements
-IBlockchainTransaction<Blockchain, TransactionResult> {
-	blockchain: Blockchain
+IBlockchainTransaction<ExtendBlockchain, TransactionResult> {
+	blockchain: ExtendBlockchain
 
 	constructor(
 		public transaction: EthereumTransaction,
@@ -15,13 +15,16 @@ IBlockchainTransaction<Blockchain, TransactionResult> {
 		this.blockchain = this.getBlockchain(network)
 	}
 
-	private getBlockchain(network: EthereumNetwork): Blockchain {
+	private getBlockchain(network: EthereumNetwork): ExtendBlockchain {
 		switch (network) {
 			case "mumbai":
 			case "polygon":
-				return Blockchain.POLYGON
+				return ExtendBlockchain.POLYGON
+			case "binance":
+			case "bscTestnet":
+				return ExtendBlockchain.BINANCE
 			default:
-				return Blockchain.ETHEREUM
+				return ExtendBlockchain.ETHEREUM
 		}
 	}
 
@@ -48,7 +51,11 @@ IBlockchainTransaction<Blockchain, TransactionResult> {
 			case "polygon":
 				return `https://polygonscan.com/tx/${this.hash()}`
 			case "testnet":
-				return `https://rinkeby.etherscan.io/tx/${this.hash()}`
+				return `https://goerli.etherscan.io/tx/${this.hash()}`
+			case "binance":
+				return `https://https://bscscan.com/tx/${this.hash()}`
+			case "bscTestnet":
+				return `https://testnet.bscscan.com/tx/${this.hash()}`
 			default:
 				throw new Error("Unsupported transaction network")
 		}

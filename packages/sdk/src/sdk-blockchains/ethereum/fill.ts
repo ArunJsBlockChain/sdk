@@ -10,7 +10,7 @@ import type {
 } from "@zodeak/ethereum-sdk/build/order/fill-order/types"
 import type { SimpleOrder } from "@zodeak/ethereum-sdk/build/order/types"
 import { BigNumber as BigNumberClass } from "@rarible/utils/build/bn"
-import { BlockchainEthereumTransaction } from "@rarible/sdk-transaction"
+import { BlockchainEthereumTransaction } from "@zodeak/sdk-transaction"
 import { isNft } from "@zodeak/ethereum-sdk/build/order/is-nft"
 import { getOwnershipId } from "@zodeak/ethereum-sdk/build/common/get-ownership-id"
 import type { EthereumWallet } from "@rarible/sdk-wallet"

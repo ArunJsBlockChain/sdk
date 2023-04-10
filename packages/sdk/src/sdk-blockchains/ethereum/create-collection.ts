@@ -2,12 +2,11 @@ import type { RaribleSdk } from "@zodeak/ethereum-sdk"
 import { Action } from "@rarible/action"
 import type { Address, ContractAddress, UnionAddress } from "@rarible/types"
 import { toAddress } from "@rarible/types"
-import { BlockchainEthereumTransaction } from "@rarible/sdk-transaction"
+import { BlockchainEthereumTransaction } from "@zodeak/sdk-transaction"
 import type { EthereumTransaction } from "@rarible/ethereum-provider"
 import type { EthereumNetwork } from "@zodeak/ethereum-sdk/build/types"
-import { Blockchain } from "@rarible/api-client"
 import type { CreateCollectionRequest, EthereumCreateCollectionAsset } from "../../types/nft/deploy/domain"
-import type { EVMBlockchain, CreateEthereumCollectionResponse } from "./common"
+import { EVMBlockchain, CreateEthereumCollectionResponse, ExtendBlockchain } from "./common"
 import { convertEthereumContractAddress, getEVMBlockchain } from "./common"
 
 export class EthereumCreateCollection {
@@ -83,7 +82,7 @@ export class EthereumCreateCollection {
 	createCollection = Action.create({
 		id: "send-tx" as const,
 		run: async (request: CreateCollectionRequest) => {
-			if (request.blockchain !== Blockchain.ETHEREUM && request.blockchain !== Blockchain.POLYGON) {
+			if (request.blockchain !== ExtendBlockchain.ETHEREUM && request.blockchain !== ExtendBlockchain.POLYGON && request.blockchain !== ExtendBlockchain.BINANCE) {
 				throw new Error("Wrong blockchain")
 			}
 			return this.convertResponse(

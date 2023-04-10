@@ -1,6 +1,6 @@
 import type { ItemId } from "@rarible/api-client"
 import type { UnionAddress } from "@rarible/types"
-import type { IBlockchainTransaction } from "@rarible/sdk-transaction"
+import type { IBlockchainTransaction } from "@zodeak/sdk-transaction"
 import type { BigNumber } from "@rarible/types/build/big-number"
 import type { AbstractPrepareResponse } from "../../../common/domain"
 

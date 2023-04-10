@@ -1,9 +1,10 @@
 import type { UnionAddress } from "@rarible/types"
-import type { Blockchain, Order, OrderId } from "@rarible/api-client"
+import type { Order, OrderId } from "@rarible/api-client"
 import type { BigNumberValue } from "@rarible/utils"
 import type { Action } from "@rarible/action"
-import type { IBlockchainTransaction } from "@rarible/sdk-transaction"
+import type { IBlockchainTransaction } from "@zodeak/sdk-transaction"
 import type { RequestCurrency } from "../common/domain"
+import { ExtendBlockchain } from "../sdk-blockchains/ethereum/common"
 
 export type IGetBalance = (address: UnionAddress, currency: RequestCurrency) => Promise<BigNumberValue>
 
@@ -16,7 +17,7 @@ export type IGetBalance = (address: UnionAddress, currency: RequestCurrency) => 
 export type IConvert = (request: ConvertRequest) => Promise<IBlockchainTransaction>
 
 export type ConvertRequest = {
-	blockchain: Blockchain
+	blockchain: ExtendBlockchain
 	isWrap: boolean
 	value: BigNumberValue
 }
@@ -29,7 +30,7 @@ export type CurrencyOrOrder = {
 } | {
 	orderId: OrderId
 } | {
-	blockchain: Blockchain
+	blockchain: ExtendBlockchain
 }
 
 export type GetBiddingBalanceRequest = {

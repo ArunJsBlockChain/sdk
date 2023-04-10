@@ -1,6 +1,6 @@
 import type { FlowSdk } from "@rarible/flow-sdk"
 import { Action } from "@rarible/action"
-import { BlockchainFlowTransaction } from "@rarible/sdk-transaction"
+import { BlockchainFlowTransaction } from "@zodeak/sdk-transaction"
 import type { FlowNetwork } from "@rarible/flow-sdk/build/types"
 import type { IApisSdk } from "../../domain"
 import type { CancelOrderRequest, ICancel } from "../../types/order/cancel/domain"

@@ -2,15 +2,16 @@ import type { Blockchain } from "@rarible/api-client"
 import type { TezosMetadataResponse } from "../../../sdk-blockchains/tezos/common"
 import type { ISolanaMetadataResponse } from "../../../sdk-blockchains/solana/domain"
 import type { ISolanaTokenMetadata } from "../../../sdk-blockchains/solana/domain"
+import { ExtendBlockchain } from "../../../sdk-blockchains/ethereum/common"
 
 export type IPreprocessMeta = (meta: PreprocessMetaRequest) => PreprocessMetaResponse
 
 export type PreprocessMetaRequest =
 	({
-		blockchain: Blockchain.ETHEREUM | Blockchain.POLYGON | Blockchain.TEZOS | Blockchain.FLOW
+		blockchain: ExtendBlockchain.ETHEREUM | ExtendBlockchain.POLYGON | ExtendBlockchain.TEZOS | ExtendBlockchain.FLOW | ExtendBlockchain.BINANCE
 	} & CommonTokenMetadata)
 	| ({
-		blockchain: Blockchain.SOLANA
+		blockchain: ExtendBlockchain.SOLANA
 	} & ISolanaTokenMetadata)
 
 export type PreprocessMetaResponse = CommonTokenMetadataResponse | TezosMetadataResponse | ISolanaMetadataResponse

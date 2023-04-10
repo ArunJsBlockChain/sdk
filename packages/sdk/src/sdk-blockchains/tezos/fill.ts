@@ -5,10 +5,9 @@ import { fill_order, get_address, get_legacy_orders, order_of_json, cart_purchas
 import type { CartOrder } from "@rarible/tezos-sdk"
 import type { BigNumber as RaribleBigNumber } from "@rarible/types"
 import { toBigNumber as toRaribleBigNumber } from "@rarible/types"
-import { BlockchainTezosTransaction } from "@rarible/sdk-transaction"
+import { BlockchainTezosTransaction, ExtendBlockchain } from "@zodeak/sdk-transaction"
 import BigNumber from "bignumber.js"
 import type { Order } from "@rarible/api-client"
-import { Blockchain } from "@rarible/api-client"
 import type { BuyRequest } from "@rarible/tezos-sdk/dist/sales/buy"
 import { buyV2, isExistsSaleOrder } from "@rarible/tezos-sdk/dist/sales/buy"
 import type { FillRequest, PrepareFillRequest, PrepareFillResponse } from "../../types/order/fill/domain"
@@ -49,7 +48,7 @@ export class TezosFill {
 			return request.order
 		} else if ("orderId" in request) {
 			const [domain] = request.orderId.split(":")
-			if (domain !== Blockchain.TEZOS) {
+			if (domain !== ExtendBlockchain.TEZOS) {
 				throw new Error("Not an tezos order")
 			}
 			return this.unionAPI.order.getOrderById({

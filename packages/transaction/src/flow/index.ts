@@ -1,9 +1,9 @@
 import { Blockchain } from "@rarible/api-client"
 import type { FlowNetwork, FlowTransaction } from "@rarible/flow-sdk/build/types"
-import type { IBlockchainTransaction } from "../domain"
+import { ExtendBlockchain, IBlockchainTransaction } from "../domain"
 
 export class BlockchainFlowTransaction implements IBlockchainTransaction {
-	blockchain: Blockchain = Blockchain.FLOW
+	blockchain: ExtendBlockchain = ExtendBlockchain.FLOW
 
 	constructor(public transaction: FlowTransaction, public network: FlowNetwork) {
 	}

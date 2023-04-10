@@ -2,7 +2,6 @@ import type { Cluster } from "@solana/web3.js"
 import type { Maybe } from "@rarible/types/build/maybe"
 import type { SolanaWallet } from "@rarible/sdk-wallet"
 import { SolanaSdk } from "@rarible/solana-sdk"
-import { Blockchain } from "@rarible/api-client"
 import type { IApisSdk, IRaribleInternalSdk } from "../../domain"
 import { nonImplementedAction } from "../../common/not-implemented"
 import { Middlewarer } from "../../common/middleware/middleware"
@@ -13,6 +12,7 @@ import { SolanaFill } from "./fill"
 import { SolanaOrder } from "./order"
 import { SolanaBalance } from "./balance"
 import { SolanaCollection } from "./collection"
+import { ExtendBlockchain } from "../ethereum/common"
 
 export function createSolanaSdk(
 	wallet: Maybe<SolanaWallet>,
@@ -35,7 +35,7 @@ export function createSolanaSdk(
 	const collectionService = new SolanaCollection(sdk, wallet, apis, config)
 
 	const preprocessMeta = Middlewarer.skipMiddleware(nftService.preprocessMeta)
-	const metaUploader = new MetaUploader(Blockchain.SOLANA, preprocessMeta)
+	const metaUploader = new MetaUploader(ExtendBlockchain.SOLANA, preprocessMeta)
 
 	return {
 		nft: {

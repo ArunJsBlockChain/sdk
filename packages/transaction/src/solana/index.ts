@@ -1,11 +1,11 @@
 import { Blockchain } from "@rarible/api-client"
 import type { TransactionResult } from "@rarible/solana-sdk"
 import type { SolanaSdk } from "@rarible/solana-sdk"
-import type { IBlockchainTransaction } from "../domain"
+import { ExtendBlockchain, IBlockchainTransaction } from "../domain"
 
 
 export class BlockchainSolanaTransaction implements IBlockchainTransaction {
-	blockchain: Blockchain = Blockchain.SOLANA
+	blockchain: ExtendBlockchain = ExtendBlockchain.SOLANA
 	cluster: string
 	getSdk: () => SolanaSdk
 

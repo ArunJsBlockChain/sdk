@@ -4,7 +4,7 @@ import type { Maybe } from "@rarible/types/build/maybe"
 import type { SolanaWallet } from "@rarible/sdk-wallet"
 import { Action } from "@rarible/action"
 import { toBigNumber } from "@rarible/types"
-import { BlockchainSolanaTransaction } from "@rarible/sdk-transaction"
+import { BlockchainSolanaTransaction } from "@zodeak/sdk-transaction"
 import type * as OrderCommon from "../../types/order/common"
 import type {
 	OrderRequest,

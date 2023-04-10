@@ -7,9 +7,9 @@ import { toAddress, toBigNumber } from "@rarible/types"
 import type { NftTokenId, Part } from "@rarible/ethereum-api-client"
 import { NftCollectionFeatures, NftCollectionType } from "@rarible/ethereum-api-client"
 import { toBn } from "@rarible/utils/build/bn"
-import { BlockchainEthereumTransaction } from "@rarible/sdk-transaction"
+import { BlockchainEthereumTransaction } from "@zodeak/sdk-transaction"
 import type { Collection, CollectionControllerApi, Creator, Royalty } from "@rarible/api-client"
-import { Blockchain, CollectionType } from "@rarible/api-client"
+import { CollectionType } from "@rarible/api-client"
 import type { CommonNftCollection } from "@zodeak/ethereum-sdk/build/common/mint"
 import type { EthereumNetwork } from "@zodeak/ethereum-sdk/build/types"
 import type { CollectionMeta } from "@rarible/api-client/build/models/CollectionMeta"
@@ -21,7 +21,7 @@ import type { HasCollection, HasCollectionId, PrepareMintRequest } from "../../t
 import type { TokenId } from "../../types/nft/generate-token-id"
 import type { IApisSdk } from "../../domain"
 import type { CommonTokenMetadataResponse, PreprocessMetaRequest } from "../../types/nft/mint/preprocess-meta"
-import type { EVMBlockchain } from "./common"
+import { EVMBlockchain, ExtendBlockchain } from "./common"
 import { convertEthereumItemId, convertToEthereumAddress, getEVMBlockchain } from "./common"
 import { getNftCollectionById } from "../../zodeak-api-client"
 
@@ -38,7 +38,7 @@ export class EthereumMint {
 	}
 
 	handleSubmit(request: MintRequest, nftCollection: CommonNftCollection, nftTokenId?: NftTokenId) {
-		if (this.blockchain === Blockchain.POLYGON && request.lazyMint) {
+		if (this.blockchain === ExtendBlockchain.POLYGON && request.lazyMint) {
 			throw new Error("Lazy minting on polygon is not supported")
 		}
 		if (EthereumSdk.isErc721v3Collection(nftCollection)) {
@@ -107,7 +107,7 @@ export class EthereumMint {
 	}
 
 	isSupportsLazyMint(collection: CommonNftCollection): boolean {
-		if (this.blockchain === Blockchain.POLYGON) {
+		if (this.blockchain === ExtendBlockchain.POLYGON) {
 			return false
 		}
 		return isErc721v3Collection(collection) || isErc1155v2Collection(collection)
@@ -155,7 +155,7 @@ export class EthereumMint {
 	}
 
 	preprocessMeta(meta: PreprocessMetaRequest): CommonTokenMetadataResponse {
-		if (meta.blockchain !== Blockchain.ETHEREUM && meta.blockchain !== Blockchain.POLYGON) {
+		if (meta.blockchain !== ExtendBlockchain.ETHEREUM && meta.blockchain !== ExtendBlockchain.POLYGON && meta.blockchain !== ExtendBlockchain.BINANCE) {
 			throw new Error("Wrong blockchain")
 		}
 

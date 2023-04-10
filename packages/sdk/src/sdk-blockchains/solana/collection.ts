@@ -3,12 +3,12 @@ import type { Maybe } from "@rarible/types/build/maybe"
 import type { SolanaWallet } from "@rarible/sdk-wallet"
 import { Action } from "@rarible/action"
 import { toContractAddress } from "@rarible/types"
-import { Blockchain } from "@rarible/api-client"
-import { BlockchainSolanaTransaction } from "@rarible/sdk-transaction"
+import { BlockchainSolanaTransaction } from "@zodeak/sdk-transaction"
 import type { IApisSdk } from "../../domain"
 import type { CreateCollectionRequest, ICreateCollection } from "../../types/nft/deploy/domain"
 import type { SolanaCreateCollectionTokenAsset } from "../../types/nft/deploy/domain"
 import type { ISolanaSdkConfig } from "./domain"
+import { ExtendBlockchain } from "../ethereum/common"
 
 export class SolanaCollection {
 	constructor(
@@ -22,7 +22,7 @@ export class SolanaCollection {
 	createCollection: ICreateCollection = Action.create({
 		id: "send-tx" as const,
 		run: async (request: CreateCollectionRequest) => {
-			if (request.blockchain !== Blockchain.SOLANA) {
+			if (request.blockchain !== ExtendBlockchain.SOLANA) {
 				throw new Error("Wrong blockchain")
 			}
 

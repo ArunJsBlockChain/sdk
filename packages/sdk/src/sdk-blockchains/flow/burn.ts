@@ -1,6 +1,6 @@
 import { Action } from "@rarible/action"
 import { toBigNumber } from "@rarible/types"
-import { BlockchainFlowTransaction } from "@rarible/sdk-transaction"
+import { BlockchainFlowTransaction } from "@zodeak/sdk-transaction"
 import type { FlowSdk } from "@rarible/flow-sdk"
 import type { FlowNetwork } from "@rarible/flow-sdk/build/types"
 import type { BurnRequest, PrepareBurnRequest, PrepareBurnResponse } from "../../types/nft/burn/domain"

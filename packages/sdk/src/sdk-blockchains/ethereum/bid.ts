@@ -1,10 +1,9 @@
 import type { RaribleSdk } from "@zodeak/ethereum-sdk"
 import type { Address, ContractAddress } from "@rarible/types"
-import { toBinary, toContractAddress, toUnionAddress, toWord } from "@rarible/types"
+import { toBinary, /* toContractAddress, toUnionAddress,*/ toWord } from "@rarible/types"
 import { toBigNumber } from "@rarible/types/build/big-number"
 import type * as ApiClient from "@rarible/api-client"
 import type { AssetType } from "@rarible/api-client"
-import { Blockchain } from "@rarible/api-client"
 import type { AssetType as EthereumAssetType } from "@rarible/ethereum-api-client/build/models/AssetType"
 import BigNumber from "bignumber.js"
 import type { Maybe } from "@rarible/types/build/maybe"
@@ -29,7 +28,7 @@ import type {
 import { getCommonConvertableValue } from "../../common/get-convertable-value"
 import { getCurrencyAssetType } from "../../common/get-currency-asset-type"
 import type { RequestCurrencyAssetType } from "../../common/domain"
-import type { EVMBlockchain } from "./common"
+import { EthEthereumAssetType, EVMBlockchain, ExtendBlockchain, toContractAddress, toUnionAddress } from "./common"
 import * as common from "./common"
 import {
 	convertEthereumContractAddress,
@@ -65,7 +64,7 @@ export class EthereumBid {
 		this.convertCurrency = this.convertCurrency.bind(this)
 	}
 
-	convertAssetType(assetType: EthereumAssetType): ApiClient.AssetType {
+	convertAssetType(assetType: EthereumAssetType & EthEthereumAssetType): ApiClient.AssetType {
 		switch (assetType.assetClass) {
 			case "ETH": {
 				return {
@@ -150,7 +149,7 @@ export class EthereumBid {
 			throw new Error("Weth contract address has not been found")
 		}
 		const [wethUnionContract] = wethAddressEntry
-		return toContractAddress(wethUnionContract)
+		return toContractAddress(wethUnionContract as ContractAddress)
 	}
 
 	async bid(prepare: PrepareBidRequest): Promise<PrepareBidResponse> {
@@ -231,7 +230,7 @@ export class EthereumBid {
 			originFeeSupport: OriginFeeSupport.FULL,
 			payoutsSupport: PayoutsSupport.MULTIPLE,
 			maxFeesBasePointSupport: MaxFeesBasePointSupport.IGNORED,
-			supportedCurrencies: common.getSupportedCurrencies(Blockchain.ETHEREUM, true),
+			supportedCurrencies: common.getSupportedCurrencies(ExtendBlockchain.ETHEREUM, true),
 			multiple: collection.type === "ERC1155",
 			maxAmount: item ? item.supply : null,
 			baseFee: await this.sdk.order.getBaseOrderFee(),
@@ -319,7 +318,7 @@ export class EthereumBid {
 			originFeeSupport: OriginFeeSupport.FULL,
 			payoutsSupport: PayoutsSupport.MULTIPLE,
 			maxFeesBasePointSupport: MaxFeesBasePointSupport.IGNORED,
-			supportedCurrencies: common.getSupportedCurrencies(Blockchain.ETHEREUM, true),
+			supportedCurrencies: common.getSupportedCurrencies(ExtendBlockchain.ETHEREUM, true),
 			multiple: collection.type === "ERC1155",
 			maxAmount: item ? item.supply : null,
 			baseFee: await this.sdk.order.getBaseOrderFee(),
@@ -340,7 +339,7 @@ export class EthereumBid {
 
 	private async getConvertableValue(request: GetConvertableValueRequest): Promise<GetConvertableValueResult> {
 		const convertMap = this.getConvertMap()
-		let assetType: AssetType
+		let assetType: AssetType | EthEthereumAssetType
 		if (request.assetType) {
 			assetType = request.assetType
 		} else if (request.currencyId) {
@@ -380,7 +379,7 @@ export class EthereumBid {
 
 		return getCommonConvertableValue(
 			this.balanceService.getBalance,
-			convertEthereumToUnionAddress(walletAddress, Blockchain.ETHEREUM),
+			convertEthereumToUnionAddress(walletAddress, ExtendBlockchain.ETHEREUM),
 			new BigNumber(finishValue),
 			{ "@type": "ETH", blockchain: this.blockchain },
 			assetType,
@@ -457,7 +456,7 @@ export class EthereumBid {
 			originFeeSupport: getOriginFeeSupport(order.type),
 			payoutsSupport: getPayoutsSupport(order.type),
 			maxFeesBasePointSupport: MaxFeesBasePointSupport.IGNORED,
-			supportedCurrencies: common.getSupportedCurrencies(Blockchain.ETHEREUM, true),
+			supportedCurrencies: common.getSupportedCurrencies(ExtendBlockchain.ETHEREUM, true),
 			baseFee: await this.sdk.order.getBaseOrderFee(order.type),
 			getConvertableValue: this.getConvertableValue,
 			submit: sellUpdateAction,

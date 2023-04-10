@@ -4,7 +4,6 @@ import { toFlowItemId } from "@rarible/flow-sdk"
 import { Action } from "@rarible/action"
 import { toBn } from "@rarible/utils/build/bn"
 import type { Order, OrderId } from "@rarible/api-client"
-import { Blockchain } from "@rarible/api-client"
 import type * as OrderCommon from "../../types/order/common"
 import type { CurrencyType } from "../../common/domain"
 import { MaxFeesBasePointSupport, OriginFeeSupport, PayoutsSupport } from "../../types/order/fill/domain"
@@ -19,10 +18,11 @@ import {
 	toFlowParts,
 } from "./common/converters"
 import { getFlowBaseFee } from "./common/get-flow-base-fee"
+import { ExtendBlockchain } from "../ethereum/common"
 
 export class FlowSell {
 	static supportedCurrencies: CurrencyType[] = [{
-		blockchain: Blockchain.FLOW,
+		blockchain: ExtendBlockchain.FLOW,
 		type: "NATIVE",
 	}]
 
@@ -73,7 +73,7 @@ export class FlowSell {
 
 	async update(request: OrderCommon.PrepareOrderUpdateRequest): Promise<OrderCommon.PrepareOrderUpdateResponse> {
 		const [blockchain, orderId] = request.orderId.split(":")
-		if (blockchain !== Blockchain.FLOW) {
+		if (blockchain !== ExtendBlockchain.FLOW) {
 			throw new Error("Not an flow order")
 		}
 		const order = await this.getPreparedOrder(request.orderId)

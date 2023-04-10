@@ -1,5 +1,5 @@
 import type { ItemId } from "@rarible/api-client"
-import type { IBlockchainTransaction } from "@rarible/sdk-transaction"
+import type { IBlockchainTransaction } from "@zodeak/sdk-transaction"
 import type { AbstractPrepareResponse } from "../../../common/domain"
 import type { MetaUploadRequest, UploadMetaResponse } from "../../../sdk-blockchains/union/meta/domain"
 import type { MintRequest } from "./mint-request.type"

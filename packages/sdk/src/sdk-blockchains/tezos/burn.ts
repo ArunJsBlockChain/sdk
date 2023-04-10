@@ -1,7 +1,7 @@
 import { toBigNumber } from "@rarible/types"
 import { Action } from "@rarible/action"
 import { burn } from "@rarible/tezos-sdk"
-import { BlockchainTezosTransaction } from "@rarible/sdk-transaction"
+import { BlockchainTezosTransaction } from "@zodeak/sdk-transaction"
 import type { TezosProvider, TezosNetwork, Provider } from "@rarible/tezos-sdk"
 import BigNumber from "bignumber.js"
 import type { BurnRequest, PrepareBurnRequest, PrepareBurnResponse } from "../../types/nft/burn/domain"

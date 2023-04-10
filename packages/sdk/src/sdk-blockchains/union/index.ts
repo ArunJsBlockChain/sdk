@@ -1,9 +1,8 @@
 import type { CollectionId, CurrencyId, ItemId, OrderId, OwnershipId } from "@rarible/api-client"
-import { Blockchain } from "@rarible/api-client"
 import type { ContractAddress, UnionAddress } from "@rarible/types"
 import type { BigNumberValue } from "@rarible/utils"
 import { Action } from "@rarible/action"
-import type { IBlockchainTransaction } from "@rarible/sdk-transaction"
+import type { IBlockchainTransaction } from "@zodeak/sdk-transaction"
 import type { IBalanceSdk, IEthereumSdk, INftSdk, IOrderInternalSdk, IRaribleInternalSdk } from "../../domain"
 import type { PrepareBurnRequest, PrepareBurnResponse } from "../../types/nft/burn/domain"
 import type { PrepareMintRequest } from "../../types/nft/mint/prepare-mint-request.type"
@@ -32,6 +31,7 @@ import type { PrepareSellInternalRequest, PrepareSellInternalResponse } from "..
 import type { ICryptopunkUnwrap, ICryptopunkWrap } from "../../types/ethereum/domain"
 import type { PrepareBatchBuyResponse } from "../../types/order/fill/domain"
 import type { MetaUploadRequest, UploadMetaResponse } from "./meta/domain"
+import { ExtendBlockchain } from "../ethereum/common"
 
 export function createUnionSdk(
 	ethereum: IRaribleInternalSdk,
@@ -40,6 +40,7 @@ export function createUnionSdk(
 	polygon: IRaribleInternalSdk,
 	solana: IRaribleInternalSdk,
 	immutablex: IRaribleInternalSdk,
+	binance: IRaribleInternalSdk
 ): IRaribleInternalSdk {
 	return {
 		balances: new UnionBalanceSdk({
@@ -49,6 +50,7 @@ export function createUnionSdk(
 			POLYGON: polygon.balances,
 			SOLANA: solana.balances,
 			IMMUTABLEX: immutablex.balances,
+			BINANCE: binance.balances
 		}),
 		nft: new UnionNftSdk({
 			ETHEREUM: ethereum.nft,
@@ -57,6 +59,7 @@ export function createUnionSdk(
 			POLYGON: polygon.nft,
 			SOLANA: solana.nft,
 			IMMUTABLEX: immutablex.nft,
+			BINANCE: binance.nft
 		}),
 		order: new UnionOrderSdk({
 			ETHEREUM: ethereum.order,
@@ -65,6 +68,7 @@ export function createUnionSdk(
 			POLYGON: polygon.order,
 			SOLANA: solana.order,
 			IMMUTABLEX: immutablex.order,
+			BINANCE: binance.order
 		}),
 		restriction: new UnionRestrictionSdk({
 			ETHEREUM: ethereum.restriction,
@@ -73,13 +77,14 @@ export function createUnionSdk(
 			POLYGON: polygon.restriction,
 			SOLANA: solana.restriction,
 			IMMUTABLEX: immutablex.restriction,
+			BINANCE: binance.restriction
 		}),
 		ethereum: new UnionEthereumSpecificSdk(ethereum.ethereum!),
 	}
 }
 
 class UnionOrderSdk implements IOrderInternalSdk {
-	constructor(private readonly instances: Record<Blockchain, IOrderInternalSdk>) {
+	constructor(private readonly instances: Record<ExtendBlockchain, IOrderInternalSdk>) {
 		this.bid = this.bid.bind(this)
 		this.bidUpdate = this.bidUpdate.bind(this)
 		this.fill = this.fill.bind(this)
@@ -147,7 +152,7 @@ function getOrderId(req: PrepareFillRequest) {
 }
 
 class UnionNftSdk implements Omit<INftSdk, "mintAndSell"> {
-	constructor(private readonly instances: Record<Blockchain, Omit<INftSdk, "mintAndSell">>) {
+	constructor(private readonly instances: Record<ExtendBlockchain, Omit<INftSdk, "mintAndSell">>) {
 		this.burn = this.burn.bind(this)
 		this.mint = this.mint.bind(this)
 		this.transfer = this.transfer.bind(this)
@@ -190,7 +195,7 @@ class UnionNftSdk implements Omit<INftSdk, "mintAndSell"> {
 }
 
 class UnionBalanceSdk implements IBalanceSdk {
-	constructor(private readonly instances: Record<Blockchain, IBalanceSdk>) {
+	constructor(private readonly instances: Record<ExtendBlockchain, IBalanceSdk>) {
 		this.getBalance = this.getBalance.bind(this)
 		this.convert = this.convert.bind(this)
 		this.getBiddingBalance = this.getBiddingBalance.bind(this)
@@ -220,7 +225,7 @@ class UnionBalanceSdk implements IBalanceSdk {
 }
 
 class UnionRestrictionSdk implements IRestrictionSdk {
-	constructor(private readonly instances: Record<Blockchain, IRestrictionSdk>) {
+	constructor(private readonly instances: Record<ExtendBlockchain, IRestrictionSdk>) {
 	}
 
 	canTransfer(
@@ -238,18 +243,19 @@ class UnionEthereumSpecificSdk implements IEthereumSdk {
 	unwrapCryptoPunk: ICryptopunkUnwrap = this.ethereumSdk.unwrapCryptoPunk
 }
 
-const blockchains: Blockchain[] = [
-	Blockchain.ETHEREUM,
-	Blockchain.FLOW,
-	Blockchain.TEZOS,
-	Blockchain.POLYGON,
-	Blockchain.SOLANA,
-	Blockchain.IMMUTABLEX,
+const blockchains: ExtendBlockchain[] = [
+	ExtendBlockchain.ETHEREUM,
+	ExtendBlockchain.FLOW,
+	ExtendBlockchain.TEZOS,
+	ExtendBlockchain.POLYGON,
+	ExtendBlockchain.SOLANA,
+	ExtendBlockchain.IMMUTABLEX,
+	ExtendBlockchain.BINANCE
 ]
 
 function extractBlockchain(
 	value: UnionAddress | ContractAddress | ItemId | OrderId | OwnershipId | CollectionId | CurrencyId,
-): Blockchain {
+): ExtendBlockchain {
 	const idx = value.indexOf(":")
 	if (idx === -1) {
 		throw new Error(`Unable to extract blockchain from ${value}`)
@@ -273,7 +279,7 @@ function getBidEntity(request: PrepareBidRequest) {
 	}
 }
 
-function getBalanceBlockchain(address: UnionAddress, currency: RequestCurrency): Blockchain {
+function getBalanceBlockchain(address: UnionAddress, currency: RequestCurrency): ExtendBlockchain {
 	if (isAssetType(currency)) {
 		if ("blockchain" in currency && currency.blockchain) {
 			return currency.blockchain
@@ -291,7 +297,7 @@ function getBalanceBlockchain(address: UnionAddress, currency: RequestCurrency):
 }
 
 
-function getBiddingBlockchain(currencyOrOrder: CurrencyOrOrder): Blockchain {
+function getBiddingBlockchain(currencyOrOrder: CurrencyOrOrder): ExtendBlockchain {
 	if ("currency" in currencyOrOrder) {
 		if (isRequestCurrencyAssetType(currencyOrOrder.currency)) {
 			return extractBlockchain(currencyOrOrder.currency)
@@ -307,9 +313,10 @@ function getBiddingBlockchain(currencyOrOrder: CurrencyOrOrder): Blockchain {
 					return extractBlockchain(currencyOrOrder.currency.itemId)
 				}
 				switch (currencyOrOrder.currency["@type"]) {
-					case "SOLANA_SOL": return Blockchain.SOLANA
-					case "ETH": return Blockchain.ETHEREUM
-					case "XTZ": return Blockchain.TEZOS
+					case "SOLANA_SOL": return ExtendBlockchain.SOLANA
+					case "ETH": return ExtendBlockchain.ETHEREUM
+					case "ETH": return ExtendBlockchain.BINANCE
+					case "XTZ": return ExtendBlockchain.TEZOS
 				}
 			}
 		}

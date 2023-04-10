@@ -7,9 +7,10 @@ import { ENV_CONFIG } from "@rarible/flow-sdk/build/config/env"
 import { toBn } from "@rarible/utils/build/bn"
 import { getFlowCurrencyFromAssetType } from "./common/get-flow-currency-from-asset-type"
 import { parseFlowAddressFromUnionAddress } from "./common/converters"
+import { EthEthereumAssetType } from "../ethereum/common"
 
 export async function getSimpleFlowFungibleBalance(
-	network: FlowEnv, address: UnionAddress, assetType: AssetType
+	network: FlowEnv, address: UnionAddress, assetType: AssetType | EthEthereumAssetType
 ): Promise<BigNumberValue> {
 	const flowAddress = parseFlowAddressFromUnionAddress(address)
 	const currency = getFlowCurrencyFromAssetType(assetType)

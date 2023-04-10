@@ -1,10 +1,10 @@
 import { Blockchain } from "@rarible/api-client"
 import type { OperationResult } from "@rarible/tezos-sdk"
 import type { TezosNetwork } from "@rarible/tezos-sdk"
-import type { IBlockchainTransaction } from "../domain"
+import { ExtendBlockchain, IBlockchainTransaction } from "../domain"
 
 export class BlockchainTezosTransaction implements IBlockchainTransaction {
-	blockchain: Blockchain = Blockchain.TEZOS
+	blockchain: ExtendBlockchain = ExtendBlockchain.TEZOS
 
 	constructor(public transaction: OperationResult, public network: TezosNetwork) {}
 

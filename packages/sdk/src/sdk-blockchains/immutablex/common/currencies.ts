@@ -1,9 +1,9 @@
-import { Blockchain } from "@rarible/api-client"
 import type { CurrencyType } from "../../../common/domain"
+import { ExtendBlockchain } from "../../ethereum/common"
 
 export function getCurrencies():  CurrencyType[] {
 	return [
-		{ blockchain: Blockchain.ETHEREUM, type: "NATIVE" },
-		{ blockchain: Blockchain.ETHEREUM, type: "ERC20" },
+		{ blockchain: ExtendBlockchain.ETHEREUM, type: "NATIVE" },
+		{ blockchain: ExtendBlockchain.ETHEREUM, type: "ERC20" },
 	]
 }

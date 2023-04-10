@@ -1,7 +1,7 @@
 import type { RaribleSdk } from "@zodeak/ethereum-sdk"
 import { Action } from "@rarible/action"
 import { toBigNumber } from "@rarible/types"
-import { BlockchainEthereumTransaction } from "@rarible/sdk-transaction"
+import { BlockchainEthereumTransaction } from "@zodeak/sdk-transaction"
 import type { EthereumNetwork } from "@zodeak/ethereum-sdk/build/types"
 import type { PrepareTransferRequest, TransferRequest } from "../../types/nft/transfer/domain"
 import { convertToEthereumAddress, isEVMBlockchain } from "./common"

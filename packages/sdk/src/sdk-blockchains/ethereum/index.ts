@@ -3,7 +3,6 @@ import { createRaribleSdk } from "@zodeak/ethereum-sdk"
 import type { ConfigurationParameters } from "@rarible/ethereum-api-client"
 import type { EthereumNetwork } from "@zodeak/ethereum-sdk/build/types"
 import type { Maybe } from "@rarible/types/build/maybe"
-import { Blockchain } from "@rarible/api-client"
 import { toBinary } from "@rarible/types"
 import type { IApisSdk, IRaribleInternalSdk, LogsLevel } from "../../domain"
 import type { CanTransferResult } from "../../types/nft/restriction/domain"
@@ -24,11 +23,12 @@ import { EthereumTokenId } from "./token-id"
 import { EthereumCreateCollection } from "./create-collection"
 import { EthereumCryptopunk } from "./cryptopunk"
 import type { IEthereumSdkConfig } from "./domain"
+import { ExtendBlockchain } from "./common"
 
 export function createEthereumSdk(
 	wallet: Maybe<EthereumWallet>,
 	apis: IApisSdk,
-	blockchain: Blockchain.ETHEREUM | Blockchain.POLYGON,
+	blockchain: ExtendBlockchain.ETHEREUM | ExtendBlockchain.POLYGON | ExtendBlockchain.BINANCE,
 	network: EthereumNetwork,
 	config: {
 		params?: ConfigurationParameters,
@@ -44,8 +44,8 @@ export function createEthereumSdk(
 			],
 		},
 		logs: config.logs,
-		ethereum: config[Blockchain.ETHEREUM],
-		polygon: config[Blockchain.POLYGON],
+		ethereum: config[ExtendBlockchain.ETHEREUM],
+		polygon: config[ExtendBlockchain.POLYGON],
 		fillCalldata: config.fillCalldata ? toBinary(config.fillCalldata) : undefined,
 	})
 
@@ -57,7 +57,7 @@ export function createEthereumSdk(
 	const createCollectionService = new EthereumCreateCollection(sdk, network)
 	const cryptopunkService = new EthereumCryptopunk(sdk, network)
 	const preprocessMeta = Middlewarer.skipMiddleware(mintService.preprocessMeta)
-	const metaUploader = new MetaUploader(Blockchain.ETHEREUM, preprocessMeta)
+	const metaUploader = new MetaUploader(ExtendBlockchain.ETHEREUM, preprocessMeta)
 
 	return {
 		nft: {

@@ -1,18 +1,28 @@
 import type { EthereumTransaction } from "@rarible/ethereum-provider"
 import type { Blockchain } from "@rarible/api-client"
 
-interface Transaction<T extends Blockchain, TransactionResult = void> {
+export enum ExtendBlockchain {
+    ETHEREUM = "ETHEREUM",
+    POLYGON = "POLYGON",
+    FLOW = "FLOW",
+    TEZOS = "TEZOS",
+    SOLANA = "SOLANA",
+    IMMUTABLEX = "IMMUTABLEX",
+	BINANCE = "BINANCE"
+}
+
+interface Transaction<T extends ExtendBlockchain, TransactionResult = void> {
 	blockchain: T
 	hash: string
 	result?: TransactionResult
 }
 
-export interface TransactionIndexer extends Record<Blockchain, any> {
+export interface TransactionIndexer extends Record<ExtendBlockchain, any> {
 	"ETHEREUM": EthereumTransaction
 	"FLOW": FlowTransaction // @todo add typings from flow-sdk
 }
 
-export interface IBlockchainTransaction<T extends Blockchain = Blockchain, TransactionResult = undefined> {
+export interface IBlockchainTransaction<T extends ExtendBlockchain = ExtendBlockchain, TransactionResult = undefined> {
 	blockchain: T
 	transaction: TransactionIndexer[T]
 	/**

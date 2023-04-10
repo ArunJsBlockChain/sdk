@@ -3,7 +3,6 @@ import { toFlowContractAddress } from "@rarible/flow-sdk"
 import { Action } from "@rarible/action"
 import { toFlowItemId } from "@rarible/flow-sdk/build/common/item"
 import { toBigNumber } from "@rarible/types/build/big-number"
-import { Blockchain } from "@rarible/api-client"
 import { MaxFeesBasePointSupport, OriginFeeSupport, PayoutsSupport } from "../../types/order/fill/domain"
 import type * as OrderCommon from "../../types/order/common"
 import type { CurrencyType } from "../../common/domain"
@@ -16,10 +15,11 @@ import type {
 import { getCurrencyAssetType } from "../../common/get-currency-asset-type"
 import { convertFlowContractAddress, convertFlowOrderId, getFungibleTokenName, toFlowParts } from "./common/converters"
 import { getFlowBaseFee } from "./common/get-flow-base-fee"
+import { ExtendBlockchain } from "../ethereum/common"
 
 export class FlowBid {
 	static supportedCurrencies: CurrencyType[] = [{
-		blockchain: Blockchain.FLOW,
+		blockchain: ExtendBlockchain.FLOW,
 		type: "NATIVE",
 	}]
 
@@ -41,7 +41,7 @@ export class FlowBid {
 		}
 
 		const [domain, contract, tokenId] = prepare.itemId.split(":")
-		if (domain !== Blockchain.FLOW) {
+		if (domain !== ExtendBlockchain.FLOW) {
 			throw new Error(`Not an flow item: ${prepare.itemId}`)
 		}
 		const itemId = toFlowItemId(`${contract}:${tokenId}`)
@@ -85,7 +85,7 @@ export class FlowBid {
 			throw new Error("OrderId has not been specified")
 		}
 		const [blockchain, orderId] = prepareRequest.orderId.split(":")
-		if (blockchain !== Blockchain.FLOW) {
+		if (blockchain !== ExtendBlockchain.FLOW) {
 			throw new Error("Not an flow order")
 		}
 		const order = await this.sdk.apis.order.getOrderByOrderId({ orderId })

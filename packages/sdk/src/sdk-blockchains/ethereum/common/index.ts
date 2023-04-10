@@ -2,15 +2,15 @@ import type { Address, UnionAddress, Word } from "@rarible/types"
 import {
 	toAddress,
 	toBigNumber,
-	toBinary, toCollectionId,
-	toContractAddress,
-	toItemId,
-	toOrderId,
-	toUnionAddress,
+	toBinary, 
+	// toCollectionId,
+	// toContractAddress,
+	// toItemId,
+	// toOrderId,
+	// toUnionAddress,
 } from "@rarible/types"
-import { isRealBlockchainSpecified } from "@rarible/types/build/blockchains"
+// import { isRealBlockchainSpecified } from "@rarible/types/build/blockchains"
 import type { AssetType, CollectionId, Creator, ItemId, OrderId } from "@rarible/api-client"
-import { Blockchain } from "@rarible/api-client"
 import type { ContractAddress } from "@rarible/types/build/contract-address"
 import type { EthereumNetwork } from "@zodeak/ethereum-sdk/build/types"
 import { toBn } from "@rarible/utils/build/bn"
@@ -22,11 +22,87 @@ import type { RequestCurrencyAssetType } from "../../../common/domain"
 import type { PrepareFillRequest } from "../../../types/order/fill/domain"
 import { OriginFeeSupport, PayoutsSupport } from "../../../types/order/fill/domain"
 import type { UnionPart } from "../../../types/order/common"
+// -------------------------------------------------------
+// ------Our code for adding a new network starts---------
+// -------------------------------------------------------
+export enum ExtendBlockchain {
+    ETHEREUM = "ETHEREUM",
+    POLYGON = "POLYGON",
+    FLOW = "FLOW",
+    TEZOS = "TEZOS",
+    SOLANA = "SOLANA",
+    IMMUTABLEX = "IMMUTABLEX",
+	BINANCE = "BINANCE"
+}
 
-export type EVMBlockchain = Blockchain.ETHEREUM | Blockchain.POLYGON
+const realBlockchains = [
+    ExtendBlockchain.ETHEREUM,
+    ExtendBlockchain.POLYGON,
+    ExtendBlockchain.FLOW,
+    ExtendBlockchain.TEZOS,
+    ExtendBlockchain.SOLANA,
+    ExtendBlockchain.IMMUTABLEX,
+	ExtendBlockchain.BINANCE
+]
+
+export type EthEthereumAssetType = {
+    "@type": "ETH";
+    blockchain?: ExtendBlockchain;
+}
+
+export function isRealBlockchainSpecified(value:string) {
+    for (let i = 0, extendedBlockchains = realBlockchains; i < extendedBlockchains.length; i++) {
+        const blockchain = extendedBlockchains[i];
+        if (value.startsWith(blockchain + ":")) {
+            return true;
+        }
+    }
+    return false;
+}
+
+export function toItemId(itemId:string):ItemId {
+	if(!isRealBlockchainSpecified(itemId as ItemId)){
+		throw new Error("Not a Item Id: " + itemId);
+	}
+	return itemId as ItemId
+}
+
+export function toContractAddress(contract:string):ContractAddress {
+	if(!isRealBlockchainSpecified(contract)){
+		throw new Error("Not a Contract Address: " + contract);
+	}
+	return contract as ContractAddress
+}
+
+export function toCollectionId(collection:string):CollectionId {
+	if(!isRealBlockchainSpecified(collection)){
+		throw new Error("Not a Collection Id: " + collection);
+	}
+	return collection as CollectionId
+}
+
+export function toUnionAddress(address:string):UnionAddress {
+	if(!isRealBlockchainSpecified(address)){
+		throw new Error("Not a Union Address: " + address);
+	}
+	return address as UnionAddress
+}
+
+export function toOrderId(order:string):OrderId {
+	if(!isRealBlockchainSpecified(order)){
+		throw new Error("Not a Order Id: " + order);
+	}
+	return order as OrderId
+}
+// -------------------------------------------------------
+// --------Our code for adding a new network ends---------
+// -------------------------------------------------------
+
+export type EVMBlockchain = ExtendBlockchain.ETHEREUM | ExtendBlockchain.POLYGON | ExtendBlockchain.BINANCE
 export const EVMBlockchains: EVMBlockchain[] = [
-	Blockchain.ETHEREUM,
-	Blockchain.POLYGON,
+	ExtendBlockchain.ETHEREUM,
+	ExtendBlockchain.POLYGON,
+	ExtendBlockchain.BINANCE
 ]
 
 export type CreateEthereumCollectionResponse = { tx: EthereumTransaction, address: Address }
@@ -47,7 +123,7 @@ export function getEthTakeAssetType(currency: RequestCurrencyAssetType) {
 	}
 }
 
-export function convertToEthereumAssetType(assetType: AssetType): EthereumAssetType {
+export function convertToEthereumAssetType(assetType: AssetType | EthEthereumAssetType): EthereumAssetType {
 	switch (assetType["@type"]) {
 		case "ETH": {
 			return { assetClass: "ETH" }
@@ -175,24 +251,28 @@ export function getPayoutsSupport(type: "RARIBLE_V1" | "RARIBLE_V2"): PayoutsSup
 export function getEVMBlockchain(network: EthereumNetwork): EVMBlockchain {
 	switch (network) {
 		case "testnet":
-			return Blockchain.ETHEREUM
+			return ExtendBlockchain.ETHEREUM
 		case "dev-ethereum":
-			return Blockchain.ETHEREUM
+			return ExtendBlockchain.ETHEREUM
 		case "dev-polygon":
-			return Blockchain.POLYGON
+			return ExtendBlockchain.POLYGON
 		case "mainnet":
-			return Blockchain.ETHEREUM
+			return ExtendBlockchain.ETHEREUM
 		case "mumbai":
-			return Blockchain.POLYGON
+			return ExtendBlockchain.POLYGON
 		case "polygon":
-			return Blockchain.POLYGON
+			return ExtendBlockchain.POLYGON
+		case "bscTestnet":
+			return ExtendBlockchain.BINANCE
+		case "binance":
+			return ExtendBlockchain.BINANCE
 		default:
 			throw new Error(`Unsupported network: ${network}`)
 	}
 }
 
 export function getSupportedCurrencies(
-	blockchain: EVMBlockchain = Blockchain.ETHEREUM,
+	blockchain: EVMBlockchain = ExtendBlockchain.ETHEREUM,
 	forBids: boolean = false,
 ): CurrencyType[] {
 	if (forBids) {
@@ -232,7 +312,7 @@ export function convertToEthereumAddress(
 }
 
 export function convertEthereumOrderHash(hash: Word, blockchain: EVMBlockchain): OrderId {
-	return toOrderId(`${blockchain}:${hash}`)
+	return toOrderId(`${blockchain}:${hash}` as OrderId)
 }
 
 export function convertOrderIdToEthereumHash(orderId: OrderId): string {
@@ -248,19 +328,19 @@ export function convertOrderIdToEthereumHash(orderId: OrderId): string {
 }
 
 export function convertEthereumContractAddress(address: string, blockchain: EVMBlockchain): ContractAddress {
-	return toContractAddress(`${blockchain}:${address}`)
+	return toContractAddress(`${blockchain}:${address}` as ContractAddress)
 }
 
 export function convertEthereumCollectionId(address: string, blockchain: EVMBlockchain): CollectionId {
-	return toCollectionId(`${blockchain}:${address}`)
+	return toCollectionId(`${blockchain}:${address}` as CollectionId)
 }
 
 export function convertEthereumToUnionAddress(address: string, blockchain: EVMBlockchain): UnionAddress {
-	return toUnionAddress(`${blockchain}:${address}`)
+	return toUnionAddress(`${blockchain}:${address}` as UnionAddress)
 }
 
 export function convertEthereumItemId(itemId: string, blockchain: EVMBlockchain): ItemId {
-	return toItemId(`${blockchain}:${itemId}`)
+	return toItemId(`${blockchain}:${itemId}` as ItemId)
 }
 
 export function getEthereumItemId(itemId: ItemId) {

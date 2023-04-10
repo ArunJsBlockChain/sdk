@@ -1,8 +1,7 @@
 import { Action } from "@rarible/action"
 import type { FlowSdk } from "@rarible/flow-sdk"
-import { BlockchainFlowTransaction } from "@rarible/sdk-transaction"
+import { BlockchainFlowTransaction } from "@zodeak/sdk-transaction"
 import type { FlowNetwork } from "@rarible/flow-sdk/build/types"
-import { Blockchain } from "@rarible/api-client"
 import type { PrepareMintResponse } from "../../types/nft/mint/domain"
 import { MintType } from "../../types/nft/mint/domain"
 import type { PrepareMintRequest } from "../../types/nft/mint/prepare-mint-request.type"
@@ -12,6 +11,7 @@ import { getCollection } from "../ethereum/mint"
 import type { CommonTokenMetadataResponse, PreprocessMetaRequest } from "../../types/nft/mint/preprocess-meta"
 import { convertFlowItemId, getFlowCollection } from "./common/converters"
 import { prepareFlowRoyalties } from "./common/prepare-flow-royalties"
+import { ExtendBlockchain } from "../ethereum/common"
 
 export class FlowMint {
 	constructor(
@@ -51,7 +51,7 @@ export class FlowMint {
 	}
 
 	preprocessMeta(meta: PreprocessMetaRequest): CommonTokenMetadataResponse {
-		if (meta.blockchain !== Blockchain.FLOW) {
+		if (meta.blockchain !== ExtendBlockchain.FLOW) {
 			throw new Error("Wrong blockchain")
 		}
 

@@ -4,7 +4,6 @@ import type { AuthWithPrivateKey, FlowEnv } from "@rarible/flow-sdk/build/types"
 import type { Maybe } from "@rarible/types/build/maybe"
 import type { ConfigurationParameters } from "@rarible/ethereum-api-client"
 import { ENV_CONFIG } from "@rarible/flow-sdk/build/config/env"
-import { Blockchain } from "@rarible/api-client"
 import type { IApisSdk, IRaribleInternalSdk } from "../../domain"
 import { nonImplementedAction, notImplemented } from "../../common/not-implemented"
 import type { CanTransferResult } from "../../types/nft/restriction/domain"
@@ -19,6 +18,7 @@ import { FlowBurn } from "./burn"
 import { FlowCancel } from "./cancel"
 import { FlowBalance } from "./balance"
 import { FlowBid } from "./bid"
+import { ExtendBlockchain } from "../ethereum/common"
 
 export function createFlowSdk(
 	wallet: Maybe<FlowWallet>,
@@ -40,7 +40,7 @@ export function createFlowSdk(
 	const bidService = new FlowBid(sdk)
 
 	const preprocessMeta = Middlewarer.skipMiddleware(mintService.preprocessMeta)
-	const metaUploader = new MetaUploader(Blockchain.FLOW, preprocessMeta)
+	const metaUploader = new MetaUploader(ExtendBlockchain.FLOW, preprocessMeta)
 
 	return {
 

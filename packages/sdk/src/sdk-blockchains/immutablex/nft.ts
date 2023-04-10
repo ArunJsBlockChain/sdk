@@ -1,5 +1,5 @@
 import type { RaribleImxSdk } from "@rarible/immutable-sdk/src/domain"
-import { BlockchainImmutableXTransaction } from "@rarible/sdk-transaction"
+import { BlockchainImmutableXTransaction } from "@zodeak/sdk-transaction"
 import { toAddress, toBigNumber } from "@rarible/types"
 import { Action } from "@rarible/action"
 import type { PrepareTransferRequest, PrepareTransferResponse, TransferRequest } from "../../types/nft/transfer/domain"

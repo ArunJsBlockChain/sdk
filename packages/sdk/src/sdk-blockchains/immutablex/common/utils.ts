@@ -1,8 +1,7 @@
 import type { Part } from "@rarible/ethereum-api-client"
 import type { CollectionId, Creator, Order } from "@rarible/api-client"
-import { Blockchain } from "@rarible/api-client"
 import type { ContractAddress } from "@rarible/types/build/contract-address"
-import { isRealBlockchainSpecified } from "@rarible/types/build/blockchains"
+// import { isRealBlockchainSpecified } from "@rarible/types/build/blockchains"
 import { toAddress } from "@rarible/types"
 import type { Address, UnionAddress } from "@rarible/types"
 import type { PrepareFillRequest } from "../../../types/order/fill/domain"
@@ -10,6 +9,7 @@ import type { IApisSdk } from "../../../domain"
 import type { UnionPart } from "../../../types/order/common"
 import type { RequestCurrency } from "../../../common/domain"
 import { getCurrencyAssetType } from "../../../common/get-currency-asset-type"
+import { ExtendBlockchain, isRealBlockchainSpecified } from "../../ethereum/common"
 
 
 export async function getPreparedOrder(request: PrepareFillRequest, apis: IApisSdk): Promise<Order> {
@@ -30,7 +30,7 @@ export function convertToEthereumAddress(
 	}
 
 	const [blockchain, address] = contractAddress.split(":")
-	if (blockchain !== Blockchain.ETHEREUM && blockchain !== Blockchain.IMMUTABLEX) {
+	if (blockchain !== ExtendBlockchain.ETHEREUM && blockchain !== ExtendBlockchain.IMMUTABLEX) {
 		throw new Error("Not an Ethereum/Immutablex address")
 	}
 	return toAddress(address)
